@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spielleiter-Toolkit – Gratis-Demo</title>
+<meta name="description" content="Kampf-Tracker und Würfel für Spielleiter: Initiative, Lebenspunkte, Zustände, Waffen. Für D&D 5e, Pathfinder 2, DSA 5, Cthulhu 7, Shadowrun 6 und Splittermond. Offline, ohne Anmeldung.">
+<meta property="og:title" content="Spielleiter-Toolkit – Gratis-Demo">
+<meta property="og:description" content="Weniger merken, weniger blättern – mehr erzählen. Kampf-Tracker und Würfel für deinen Spieltisch, direkt im Browser.">
+<meta property="og:image" content="https://ringolohse242-spec.github.io/spielleiter-toolkit/og.jpg">
+<meta property="og:url" content="https://ringolohse242-spec.github.io/spielleiter-toolkit/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--radius:10px;--font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+html[data-theme="dark"]{--bg:#0c0a0a;--panel:#161212;--panel2:#201919;--panel3:#2a2020;--border:#332828;--text:#f1e9e6;--muted:#a4958f;--accent:#d0182a;--accent-h:#e8303f;--accent-soft:rgba(208,24,42,.16);--on-accent:#fff;--danger:#ff5664;--ok:#45b06f;--warn:#e3a33a;--input:#0f0c0c;--shadow:0 10px 30px rgba(0,0,0,.55);--tag-p:#ff7a85;--tag-o:#e0b25a;--tag-f:#ff5664;--r2:#7fa2ff}
+html[data-theme="clean"]{--bg:#ffffff;--panel:#ffffff;--panel2:#f4f4f4;--panel3:#e9e9e9;--border:#dddddd;--text:#111111;--muted:#666666;--accent:#111111;--accent-h:#333333;--accent-soft:rgba(0,0,0,.07);--on-accent:#ffffff;--danger:#b3261e;--ok:#2e7d4f;--warn:#a86a00;--input:#ffffff;--shadow:0 10px 30px rgba(0,0,0,.14);--tag-p:#111;--tag-o:#111;--tag-f:#b3261e;--r2:#555555}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.45 var(--font);-webkit-font-smoothing:antialiased;min-height:100vh}
+h1{font-size:24px;margin:0 0 2px;letter-spacing:-.2px}
+h2{font-size:16px;margin:0}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+kbd{font:11px/1 var(--font);border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:2px 5px;color:var(--muted);background:var(--panel2)}
+.btn.primary kbd{background:transparent;color:inherit;border-color:rgba(255,255,255,.4);opacity:.85}
+code{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:0 4px;font-size:13px}
+
+/* Header */
+header.top{display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;white-space:nowrap}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-weight:900;font-size:13px;letter-spacing:.5px}
+.camp{display:flex;align-items:center;gap:10px;flex:1;min-width:220px}
+.camp input{background:transparent;border:1px solid transparent;color:var(--text);font:600 15px var(--font);padding:6px 8px;border-radius:8px;flex:1 1 auto;width:auto;max-width:280px;min-width:110px}
+.camp .stepper{flex:none}
+.camp input:hover{border-color:var(--border)}
+.camp input:focus{outline:none;border-color:var(--accent);background:var(--input)}
+.stepper{display:flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden;white-space:nowrap}
+.stepper span{padding:0 10px;font-size:14px}
+.stepper button{background:var(--panel2);border:0;color:var(--text);width:30px;height:32px;cursor:pointer;font-size:16px}
+.stepper button:hover{background:var(--panel3)}
+.hactions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Layout */
+.app{display:grid;grid-template-columns:200px minmax(0,1fr) 340px;gap:18px;padding:18px;max-width:1640px;margin:0 auto;align-items:start}
+nav.side{display:flex;flex-direction:column;gap:4px;position:sticky;top:74px}
+nav.side button{display:flex;align-items:center;gap:10px;background:transparent;border:1px solid transparent;color:var(--muted);font:600 14px var(--font);padding:10px 12px;border-radius:9px;cursor:pointer;text-align:left}
+nav.side button:hover{background:var(--panel2);color:var(--text)}
+nav.side button.active{background:var(--accent-soft);color:var(--text);border-color:var(--border)}
+nav.side button.active svg{color:var(--accent)}
+html[data-theme="clean"] nav.side button.active{background:var(--text);color:#fff;border-color:var(--text)}
+html[data-theme="clean"] nav.side button.active svg{color:#fff}
+nav.side button kbd{margin-left:auto}
+nav.side .navnote{margin-top:14px;padding:10px 12px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
+main{min-width:0;display:flex;flex-direction:column;gap:14px}
+aside{display:flex;flex-direction:column;gap:14px;position:sticky;top:74px;max-height:calc(100vh - 92px);overflow:auto;padding-bottom:4px}
+.view-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.card-title{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.card-title h2{flex:1}
+.row{display:flex;align-items:center;gap:8px}
+.wrap{flex-wrap:wrap}
+.gap{gap:10px}
+.mt{margin-top:12px}
+.grow{flex:1;min-width:0}
+.spacer{flex:1}
+
+/* Forms */
+input,select,textarea{font:inherit;color:var(--text);background:var(--input);border:1px solid var(--border);border-radius:8px;padding:8px 10px;min-width:0}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+input::placeholder,textarea::placeholder{color:var(--muted);opacity:.8}
+textarea{width:100%;resize:vertical;min-height:70px;line-height:1.5}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+label.f input,label.f select{text-transform:none;letter-spacing:0;font-weight:400;font-size:15px}
+.w70{width:76px}.w90{width:150px}.w80{width:84px}
+.inrow{display:flex;gap:4px}
+.inrow input{width:100%}
+label.chk{display:flex;align-items:center;gap:7px;font-size:14px;cursor:pointer;user-select:none}
+label.chk input{width:16px;height:16px;accent-color:var(--accent)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font:600 14px var(--font);padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);cursor:pointer;white-space:nowrap;transition:background .12s,border-color .12s,transform .05s}
+.btn:hover{background:var(--panel3)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{background:var(--accent-h);border-color:var(--accent-h)}
+.btn.ghost{background:transparent}
+.btn.ghost:hover{background:var(--panel2)}
+.btn.danger{color:var(--danger)}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:7px}
+.btn.big{padding:11px 20px;font-size:15px}
+.btn:focus-visible,.icon-btn:focus-visible,nav.side button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.icon-btn{background:transparent;border:1px solid transparent;color:var(--muted);width:32px;height:32px;border-radius:8px;cursor:pointer;display:inline-grid;place-items:center;font-size:14px}
+.icon-btn:hover{background:var(--panel2);color:var(--text);border-color:var(--border)}
+.icon-btn.danger:hover{color:var(--danger)}
+
+/* Empty states */
+.empty{text-align:center;padding:30px 16px;color:var(--muted);border:1px dashed var(--border);border-radius:var(--radius)}
+.empty b{display:block;color:var(--text);font-size:16px;margin-bottom:4px}
+
+/* Combat */
+.addrow{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.addrow .grow{flex:1;min-width:150px}
+.cbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.round{font-size:15px;color:var(--muted)}
+.round b{font-size:22px;color:var(--text);margin-left:4px}
+.clist{display:flex;flex-direction:column;gap:8px}
+.crow{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;transition:border-color .15s,background .15s}
+.crow.current{border-color:var(--accent);background:linear-gradient(90deg,var(--accent-soft),transparent 60%);box-shadow:inset 4px 0 0 var(--accent)}
+.crow.down{opacity:.5}
+.crow.down .nm{text-decoration:line-through}
+.ini input{width:64px;text-align:center;font-size:18px;font-weight:700;padding:8px 4px}
+.ini input.need{border-color:var(--warn);box-shadow:0 0 0 3px rgba(227,163,58,.18)}
+.ini small{display:block;text-align:center;font-size:11px;color:var(--muted);margin-top:3px}
+.cname{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nm{font-weight:700;font-size:16px}
+.turnmark{background:var(--accent);color:var(--on-accent);font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:5px}
+.tag-sc{font-size:11px;font-weight:700;border:1px solid var(--border);color:var(--muted);padding:1px 6px;border-radius:5px}
+.def{font-size:13px;color:var(--muted)}
+.hp{display:flex;align-items:center;gap:10px;margin-top:7px}
+.hpbar{flex:1;max-width:260px;height:8px;background:var(--panel3);border-radius:6px;overflow:hidden}
+.hpbar i{display:block;height:100%;background:var(--ok);border-radius:6px;transition:width .25s}
+.hpbar i.mid{background:var(--warn)}
+.hpbar i.low{background:var(--danger)}
+.hpnum{font-size:13px;color:var(--muted);white-space:nowrap}
+.hpnum b{color:var(--text);font-size:15px}
+.conds{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;background:var(--panel2);border:1px solid var(--border);border-radius:20px;padding:3px 4px 3px 10px}
+.chip b{background:var(--accent);color:var(--on-accent);border-radius:10px;padding:0 6px;font-size:11px}
+.chip button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:11px;padding:0 4px;border-radius:10px}
+.chip button:hover{color:var(--danger)}
+.chip.add{padding:3px 10px;cursor:pointer;color:var(--muted);border-style:dashed;background:transparent;font:600 12px var(--font)}
+.chip.add:hover{color:var(--text);border-color:var(--accent)}
+.condform{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.condform input{padding:6px 8px;font-size:13px}
+.condform input[name=cname]{width:190px}
+.condform input[name=crounds]{width:150px}
+.cact{display:flex;align-items:center;gap:6px}
+.cact .amt{width:70px;text-align:center;padding:6px}
+.btn.dmg{color:var(--danger)}
+.btn.heal{color:var(--ok)}
+.combat-hint{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* NPC */
+.npc-card{margin-top:14px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.npc-head{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--panel2);border-bottom:1px solid var(--border)}
+.npc-head .nname{font-size:22px;font-weight:800;flex:1}
+.npc-field{display:grid;grid-template-columns:120px minmax(0,1fr) 34px;gap:10px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border)}
+.npc-field:last-of-type{border-bottom:0}
+.npc-field .lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+.npc-foot{display:flex;gap:8px;padding:12px 16px;background:var(--panel2);border-top:1px solid var(--border);flex-wrap:wrap}
+.npc-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.npc-item{border:1px solid var(--border);border-radius:var(--radius);padding:12px;background:var(--panel2);display:flex;flex-direction:column;gap:6px}
+.npc-item .top{display:flex;align-items:flex-start;gap:6px}
+.npc-item .top div{flex:1}
+.npc-item .nm{font-size:15px}
+.npc-item .meta{font-size:12px;color:var(--muted)}
+.npc-item ul{margin:0;padding-left:16px;font-size:13px}
+.npc-item textarea{min-height:38px;font-size:13px;padding:6px 8px}
+
+/* Log */
+.loglist{display:flex;flex-direction:column;gap:2px}
+.sess-h{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:14px 0 6px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.sess-h:first-child{margin-top:0}
+.lentry{display:grid;grid-template-columns:52px 22px minmax(0,1fr) auto;gap:8px;align-items:start;padding:8px 6px;border-radius:8px}
+.lentry:hover{background:var(--panel2)}
+.lentry .time{font-size:12px;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}
+.lentry .txt{word-wrap:break-word}
+.lentry.done .txt{color:var(--muted);text-decoration:line-through}
+.lentry .acts{display:flex;gap:2px;opacity:0;transition:opacity .1s}
+.lentry:hover .acts,.lentry:focus-within .acts{opacity:1}
+.lentry input[type=checkbox]{width:16px;height:16px;margin-top:3px;accent-color:var(--accent)}
+button.tag{font:600 13px var(--font);border:0;background:var(--accent-soft);border-radius:5px;padding:0 5px;cursor:pointer}
+button.tag.tp{color:var(--tag-p)}
+button.tag.to{color:var(--tag-o)}
+button.tag.tf{color:var(--tag-f);text-decoration:underline}
+html[data-theme="clean"] button.tag{border:1px solid var(--border);background:var(--panel2)}
+.filters input[type=search]{flex:1;min-width:160px}
+.activefilter{display:inline-flex;align-items:center;gap:6px;font-size:13px;background:var(--accent-soft);border:1px solid var(--border);border-radius:20px;padding:3px 4px 3px 10px}
+.hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.7}
+
+/* Tables */
+.tables{display:grid;grid-template-columns:220px minmax(0,1fr);gap:14px;align-items:start}
+.tlist{display:flex;flex-direction:column;gap:3px}
+.tlist button.t{display:flex;align-items:center;gap:8px;text-align:left;background:transparent;border:1px solid transparent;color:var(--text);font:500 14px var(--font);padding:9px 10px;border-radius:8px;cursor:pointer}
+.tlist button.t:hover{background:var(--panel2)}
+.tlist button.t.active{background:var(--accent-soft);border-color:var(--border);font-weight:700}
+.tlist button.t span{flex:1}
+.tlist .cnt{font-size:12px;color:var(--muted)}
+.result{margin:14px 0;padding:18px;border-radius:var(--radius);border:1px solid var(--accent);background:var(--accent-soft);font-size:18px;font-weight:600;display:flex;align-items:center;gap:12px}
+.result span{flex:1}
+.entries{margin:0;padding-left:30px;columns:2;column-gap:30px;font-size:14px}
+.entries li{break-inside:avoid;padding:3px 0;color:var(--muted)}
+.entries li span{color:var(--text)}
+.entries li.hit span{color:var(--accent);font-weight:700}
+html[data-theme="clean"] .entries li.hit span{text-decoration:underline}
+
+/* Aside: Dice */
+.dgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.dgrid .btn{padding:9px 0}
+.dresult{display:flex;align-items:center;gap:14px;margin:12px 0 4px;min-height:58px}
+.dresult .num{font-size:42px;font-weight:900;line-height:1;min-width:58px;text-align:center;font-variant-numeric:tabular-nums}
+.dresult .num.crit{color:var(--accent)}
+.dresult .num.fumble{color:var(--muted)}
+.dresult .det{font-size:13px;color:var(--muted);line-height:1.4}
+.dresult .det b{color:var(--text)}
+.dhist{list-style:none;margin:8px 0 0;padding:0;max-height:180px;overflow:auto;font-size:13px}
+.dhist li{display:flex;gap:8px;padding:4px 2px;border-top:1px solid var(--border)}
+.dhist li .e{color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dhist li b{font-variant-numeric:tabular-nums}
+@keyframes pop{0%{transform:scale(.6);opacity:.2}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.pop{animation:pop .28s ease-out}
+.qnotes{list-style:none;margin:10px 0 0;padding:0;font-size:13px}
+.qnotes li{padding:5px 0;border-top:1px solid var(--border);display:flex;gap:8px}
+.qnotes li .time{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.pinned ol{margin:0;padding-left:22px;font-size:13px;max-height:200px;overflow:auto}
+.pinned ol li{padding:2px 0}
+
+/* Modal + Toast */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;z-index:100;padding:16px;animation:fade .12s}
+@keyframes fade{from{opacity:0}}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);width:min(560px,100%);max-height:calc(100vh - 32px);overflow:auto}
+.modal .mh{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--border)}
+.modal .mh h2{flex:1;font-size:18px}
+.modal .mb{padding:18px}
+.modal .mf{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--border)}
+.modal ul.tips{padding-left:18px;margin:10px 0;line-height:1.7}
+.modal table{width:100%;border-collapse:collapse;font-size:14px}
+.modal td{padding:6px 4px;border-bottom:1px solid var(--border)}
+.modal td:first-child{width:110px}
+.party-row{display:grid;grid-template-columns:1fr 80px 80px 34px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.toasts{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:200;align-items:center;pointer-events:none}
+.toast{background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:var(--shadow);animation:fade .15s;max-width:90vw}
+.toast.warn{background:var(--accent);color:var(--on-accent)}
+footer{text-align:center;font-size:12px;color:var(--muted);padding:6px 18px 24px}
+
+/* Regelsysteme */
+.w100{width:120px}
+#systemSel{font:600 14px var(--font);padding:6px 10px;max-width:230px;flex:none}
+.sysline{display:inline-flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font:600 13px var(--font);padding:6px 12px;border-radius:20px;cursor:pointer}
+.sysline:hover{border-color:var(--accent)}
+.sysline svg{color:var(--accent)}
+.syspick{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin:14px 0 6px}
+.syspick button{display:flex;flex-direction:column;gap:3px;text-align:left;background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);cursor:pointer;font:inherit}
+.syspick button span{font-size:12px;color:var(--muted)}
+.syspick button:hover{border-color:var(--accent)}
+.syspick button.on{border-color:var(--accent);background:var(--accent-soft)}
+.modal.wide{width:min(760px,100%)}
+.spgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.dmsg{font-weight:800;color:var(--accent)}
+.dmsg.fumble{color:var(--danger)}
+.hpbar.r2 i{background:var(--r2)}
+.btn.r2b{color:var(--r2)}
+.cact .cbtns{display:flex;flex-wrap:wrap;gap:6px;max-width:250px;justify-content:flex-end}
+.costf input{width:70px}
+.party-row{grid-template-columns:1fr auto 34px !important}
+
+/* NSC-Erweiterung */
+.npcopts{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.npcopts select{width:100%}
+div.f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;flex-wrap:wrap}
+.seg button{background:var(--panel2);border:0;border-right:1px solid var(--border);color:var(--text);font:600 14px var(--font);padding:9px 16px;cursor:pointer;text-transform:none;letter-spacing:0}
+.seg button:last-child{border-right:0}
+.seg button:hover{background:var(--panel3)}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.seg button.on.pos{background:var(--ok);color:#fff}
+.seg button.on.neg{background:var(--danger);color:#fff}
+.seg button.on.neu{background:var(--muted);color:var(--bg)}
+.seg.sm button{padding:5px 11px;font-size:12px}
+.attb{display:inline-block;vertical-align:middle;font-size:11px;font-weight:800;padding:1px 8px;border-radius:20px;border:1px solid currentColor;white-space:nowrap;margin-left:4px}
+.attb.pos{color:var(--ok)}.attb.neu{color:var(--muted)}.attb.neg{color:var(--danger)}
+.npc-card.att-pos{border-color:var(--ok)}
+.npc-card.att-neg{border-color:var(--danger)}
+.npc-field.hl{background:var(--accent-soft)}
+.npc-card.att-pos .npc-field.hl{background:rgba(69,176,111,.12)}
+.npc-card.att-neg .npc-field.hl{background:rgba(255,86,100,.10)}
+.npc-item.att-pos{box-shadow:inset 3px 0 0 var(--ok)}
+.npc-item.att-neg{box-shadow:inset 3px 0 0 var(--danger)}
+.npc-item.att-neu{box-shadow:inset 3px 0 0 var(--muted)}
+.npc-item details summary{cursor:pointer;font-size:12px;color:var(--muted)}
+.npc-item details p{margin-top:4px}
+.npc-item select{padding:3px 6px;font-size:12px}
+.card-title.wrap{flex-wrap:wrap}
+
+/* Waffen */
+.wsel select{max-width:220px}
+.wpn{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.wpn select{padding:5px 8px;font-size:13px;max-width:260px}
+.wpn .wbonus{width:110px;padding:5px 8px;font-size:13px}
+.btn.crit{color:var(--accent);border-color:var(--accent)}
+html[data-theme="clean"] .btn.crit{color:var(--text);border-color:var(--text)}
+.atkres{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;padding:10px 12px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:9px}
+.atkres .big{font-size:28px;font-weight:900;line-height:1;min-width:36px;text-align:center}
+.atkres .det{font-size:12px;color:var(--muted);flex:1;min-width:140px}
+.atkres .det b{color:var(--text);font-size:13px}
+.atkres .tgt{display:flex;align-items:center;gap:6px;font-size:13px}
+.atkres select{padding:5px 8px;font-size:13px}
+.wtable{width:100%;border-collapse:collapse;font-size:14px}
+.wtable th{text-align:left;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;padding:4px;border-bottom:1px solid var(--border)}
+.wtable td{padding:5px 4px;border-bottom:1px solid var(--border)}
+.modal .wtable td:first-child{width:auto}
+
+/* Demo */
+.demob{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;background:var(--accent);color:var(--on-accent);padding:2px 7px;border-radius:5px}
+.navlock{margin-left:auto;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);border:1px solid var(--border);border-radius:4px;padding:1px 5px}
+.lockb{font-size:12px;vertical-align:middle;font-weight:800;letter-spacing:.5px;text-transform:uppercase;border:1px solid var(--accent);color:var(--accent);padding:2px 8px;border-radius:20px}
+.card.locked{padding:28px}
+.card.locked h2{font-size:18px;margin-bottom:4px}
+.card.locked .tips{line-height:1.8;padding-left:20px;margin:10px 0}
+.lockicon{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:12px}
+.card.promo{border-color:var(--accent)}
+.card.promo a{color:inherit}
+a.btn{text-decoration:none}
+.hint a{color:var(--text)}
+
+/* Responsive */
+@media (max-width:1180px){.app{grid-template-columns:180px minmax(0,1fr)}aside{grid-column:2;position:static;max-height:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}}
+@media (max-width:780px){
+ .cact .cbtns{max-width:none;justify-content:flex-start}
+ .camp{flex-wrap:wrap}
+ #systemSel{max-width:none;flex:1 1 100%}
+ .npc-field{grid-template-columns:minmax(0,1fr) 34px !important;row-gap:2px}
+ .npc-field .lbl{grid-column:1/-1}
+ .npc-head{flex-wrap:wrap}
+ .app{grid-template-columns:1fr;padding:12px;gap:12px}
+ nav.side{flex-direction:row;overflow-x:auto;position:static;gap:6px}
+ nav.side button{white-space:nowrap;padding:8px 10px}
+ nav.side button kbd,nav.side .navnote{display:none}
+ aside{grid-column:1}
+ kbd{display:none}
+ .crow{grid-template-columns:62px minmax(0,1fr)}
+ .cact{grid-column:1/-1;flex-wrap:wrap}
+ .tables{grid-template-columns:1fr}
+ .entries{columns:1}
+ .npc-field{grid-template-columns:90px minmax(0,1fr) 34px}
+ header.top{padding:10px 12px}
+ .hactions .lbl{display:none}
+}
+@media print{header.top,nav.side,aside{display:none}.app{display:block}}
+</style>
+</head>
+<body>
+<noscript><p style="padding:20px">Bitte JavaScript aktivieren, um das Spielleiter-Toolkit zu nutzen.</p></noscript>
+
+<header class="top">
+  <div class="brand"><div class="logo">SL</div><span>Spielleiter-Toolkit</span><span class="demob">Demo</span></div>
+  <div class="camp">
+    <input id="campaign" aria-label="Name der Kampagne" maxlength="60">
+    <div class="stepper" title="Aktuelle Sitzung">
+      <button data-act="sessDown" aria-label="Sitzung zurück">−</button>
+      <span>Sitzung <b id="sessNum">1</b></span>
+      <button data-act="sessUp" aria-label="Neue Sitzung">+</button>
+    </div>
+    <select id="systemSel" data-change="system" aria-label="Regelsystem" title="Regelsystem wählen"></select>
+  </div>
+  <div class="hactions">
+    <button class="btn sm ghost" data-act="export" title="Alle Daten als Datei sichern"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span class="lbl">Sichern</span></button>
+    <button class="btn sm ghost" data-act="import" title="Gesicherte Datei laden"><svg class="i" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg><span class="lbl">Laden</span></button>
+    <button class="btn sm" data-act="theme" id="themeBtn"></button>
+    <button class="btn sm ghost" data-act="help" title="Hilfe und Tastenkürzel (?)">?</button>
+  </div>
+  <input type="file" id="importFile" accept=".json,application/json" hidden>
+</header>
+
+<div class="app">
+  <nav class="side" id="nav"></nav>
+  <main id="main"></main>
+  <aside id="aside"></aside>
+</div>
+<footer>Alle Daten bleiben in diesem Browser gespeichert. Mit „Sichern“ erstellst du eine Sicherungsdatei.</footer>
+
+<datalist id="condList"></datalist>
+<div class="toasts" id="toasts"></div>
+
+<script>
+'use strict';
+/* ================= Hilfsfunktionen ================= */
+const KEY = 'sl-toolkit-demo-v1';
+const DEMO = true;
+const CONTACT = '20thgames@gmail.com';
+const BUY_URL = ''; // Link zur Vollversion (z. B. Ko-fi) hier eintragen
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4);
+function rnd(n) {
+  if (window.crypto && crypto.getRandomValues) { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; }
+  return Math.floor(Math.random() * n);
+}
+const pick = a => a[rnd(a.length)];
+const nowTime = () => new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
+const num = v => (v === '' || v == null || isNaN(+v)) ? null : +v;
+const slug = s => String(s || 'kampagne').toLowerCase().replace(/[^a-z0-9äöüß]+/g, '-').replace(/^-|-$/g, '') || 'kampagne';
+
+/* ================= Regelsysteme ================= */
+const SYSTEMS = {
+  generic: {label: 'Allgemein (systemneutral)', short: 'Allgemein', hp: 'TP', def: 'Vert.', r2: null,
+    ini: {label: 'Ini-Bonus', expr: '1W20', op: '+', hint: 'Initiative = 1W20 + Bonus'},
+    dice: ['1W4','1W6','1W8','1W10','1W12','1W20','1W100','3W20'], specials: ['adv','dis'], crit: 'd20', npcSet: 'fantasy',
+    conds: ['Benommen','Betäubt','Bewusstlos','Blind','Blutend','Brennend','Erschöpft','Festgehalten','Gelähmt','Liegend','Taub','Unsichtbar','Verängstigt','Vergiftet','Verwirrt']},
+  dnd5e: {label: 'D&D 5e', short: 'D&D 5e', hp: 'TP', def: 'RK', r2: null,
+    ini: {label: 'Ini-Bonus', expr: '1W20', op: '+', hint: 'Initiative = 1W20 + Geschicklichkeitsbonus'},
+    dice: ['1W4','1W6','1W8','1W10','1W12','1W20','1W100'], specials: ['adv','dis'], crit: 'd20', npcSet: 'fantasy',
+    conds: ['Betäubt','Bewusstlos','Bezaubert','Blind','Erschöpft','Festgesetzt','Gelähmt','Gepackt','Kampfunfähig','Liegend','Taub','Unsichtbar','Verängstigt','Vergiftet','Versteinert','Konzentration']},
+  pf2: {label: 'Pathfinder 2e', short: 'PF2', hp: 'TP', def: 'RK', r2: null,
+    ini: {label: 'Wahrnehmung', expr: '1W20', op: '+', hint: 'Initiative = 1W20 + Wahrnehmung. Zustände mit Wert (z. B. Verängstigt 2) als Runden eintragen.'},
+    dice: ['1W4','1W6','1W8','1W10','1W12','1W20','1W100'], specials: ['adv','dis'], crit: 'd20', npcSet: 'fantasy',
+    conds: ['Benommen','Betäubt','Bewusstlos','Blind','Entkräftet','Ergriffen','Erschöpft','Festgehalten','Geblendet','Gelähmt','Geschwächt','Kränkelnd','Liegend','Schwerfällig','Sterbend','Taub','Unsichtbar','Verängstigt','Verlangsamt','Verwundet']},
+  dsa5: {label: 'Das Schwarze Auge 5', short: 'DSA 5', hp: 'LeP', def: 'RS', r2: 'AsP/KaP',
+    ini: {label: 'INI-Basis', expr: '1W6', op: '+', hint: 'Initiative = INI-Basiswert + 1W6'},
+    dice: ['1W6','2W6','1W20','3W20'], specials: [], crit: 'dsa', npcSet: 'fantasy',
+    conds: ['Belastung','Betäubung','Entrückung','Furcht','Paralyse','Schmerz','Verwirrung','Berauscht','Blind','Blutend','Bewusstlos','Brennend','Eingeengt','Fixiert','Handlungsunfähig','Krank','Liegend','Überrascht','Unsichtbar','Vergiftet']},
+  coc7: {label: 'Call of Cthulhu 7', short: 'Cthulhu 7', hp: 'TP', def: 'Rüstung', r2: 'STA',
+    ini: {label: 'GE', expr: null, op: '+', hint: 'Reihenfolge nach Geschicklichkeit (GE), höchster Wert zuerst. Zweiter Balken: Stabilität (STA).'},
+    dice: ['1W4','1W6','1W8','1W10','1W20','1W100'], specials: ['cocBonus','cocMalus'], crit: 'coc', npcSet: 'twenties',
+    conds: ['Schwer verletzt','Bewusstlos','Sterbend','Vorübergehender Wahnsinn','Dauerhafter Wahnsinn','Phobie','Manie','Liegend','In Deckung','Gefesselt','Vergiftet','Blind']},
+  sr6: {label: 'Shadowrun 6', short: 'SR6', hp: 'Körperlich', def: 'VTW', r2: 'Geistig',
+    ini: {label: 'INI', expr: '1W6', op: '+', dice: true, hint: 'Initiative = INI-Wert + Initiativewürfel (W6). Balken = verbleibende Kästchen im Zustandsmonitor.'},
+    dice: ['1W6','2W6'], specials: ['pool'], crit: null, npcSet: 'cyber',
+    conds: ['Benommen','Bewegungsunfähig','Blind','Brennend','Elektrisiert','Erschöpft','Lautlos','Liegend','Nass','Panisch','Taub','Übelkeit','Unsichtbar','Unterkühlt','Verängstigt','Verätzt','Vergiftet','Verkrüppelt','Versteinert']},
+  splitter: {label: 'Splittermond', short: 'Splittermond', hp: 'LP', def: 'VTD', r2: 'Fokus',
+    ini: {label: 'INI', expr: '1W6', op: '-', hint: 'Tickleiste: Startposition = INI − 1W6. Wer auf dem niedrigsten Tick steht, ist dran.'},
+    tick: true, dice: ['1W6','1W10','2W10'], specials: ['smSafe','smRisk'], crit: null, npcSet: 'fantasy',
+    conds: ['Benommen','Betäubt','Blutend','Brennend','Erschöpft','Geblendet','Lahm','Liegend','Sterbend','Vergiftet','Verwundet','Wehrlos']}
+};
+const P = () => SYSTEMS[S.system] || SYSTEMS.generic;
+
+/* ================= NSC-Inhalte (nur in der Vollversion) ================= */
+const CULTURES = {
+  mittel: {set: 'fantasy', label: 'Mittelländisch', m: ['–'], f: ['–'], last: () => '–'},
+  usa20: {set: 'twenties', label: '1920er', m: ['–'], f: ['–'], last: () => '–'},
+  sprawl: {set: 'cyber', label: 'Sprawl', m: ['–'], f: ['–'], last: () => '–'}
+};
+const emptySet = {roles: {volk: '–'}, jobs: {volk: [['–','–']]}, looks: ['–'], motives: ['–'], secrets: ['–']};
+const CONTENT = {fantasy: emptySet, twenties: emptySet, cyber: emptySet};
+const QUIRKS = ['–'], TRAITS = ['–'];
+const AGES = {jung: ['–'], erwachsen: ['–'], alt: ['–']};
+const AGE_LABEL = {jung: 'Jung', erwachsen: 'Erwachsen', alt: 'Alt'};
+const ATT = {pos: {label: 'Positiv', log: 'positiv', lines: ['–']}, neu: {label: 'Neutral', log: 'neutral', lines: ['–']}, neg: {label: 'Negativ', log: 'negativ', lines: ['–']}};
+const culturesFor = set => Object.entries(CULTURES).filter(([, c]) => c.set === set);
+
+function defaultTables() { return []; }
+
+/* ================= Zustand ================= */
+const emptyCombat = () => ({active: false, round: 1, currentId: null, list: [], lastCost: 5, hist: []});
+const defaultState = () => ({
+  version: 2, system: 'generic', seenSystem: false, campaign: 'Meine Kampagne', session: 1, theme: 'dark', view: 'combat',
+  combat: emptyCombat(), party: [], weapons: [], npcs: [], log: [], tables: defaultTables(), pinned: null, dice: [], poolSize: 8,
+  npcPrefs: {culture: 'mittel', gender: 'x', age: 'x', role: 'x', att: 'x'}, lastExport: null, seenWelcome: false
+});
+function load() {
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+  return normalize(s);
+}
+function normalize(s) {
+  const d = defaultState();
+  if (!s || typeof s !== 'object') return d;
+  const out = Object.assign(d, s);
+  out.combat = Object.assign(emptyCombat(), s.combat || {});
+  if (!Array.isArray(out.combat.hist)) out.combat.hist = [];
+  ['party','weapons','npcs','log','tables','dice'].forEach(k => { if (!Array.isArray(out[k])) out[k] = k === 'tables' ? defaultTables() : []; });
+  out.npcPrefs = Object.assign({culture: 'mittel', gender: 'x', age: 'x', role: 'x', att: 'x'}, s.npcPrefs || {});
+  if (!SYSTEMS[out.system]) out.system = 'generic';
+  return out;
+}
+let S = load();
+const ui = {attack: null, draft: null, condFor: null, npcSearch: '', npcAtt: 'all', logSession: 'all', logSearch: '', logOpen: false, logTag: null, editLog: null, tableSel: null, tableEdit: false, tableResult: null, lastRoll: null};
+let saveTimer = null, saveWarned = false;
+function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); }
+    catch (e) { if (!saveWarned) { toast('Speichern im Browser nicht möglich. Bitte regelmäßig „Sichern“ nutzen.', 'warn'); saveWarned = true; } }
+  }, 250);
+}
+
+/* ================= UI-Bausteine ================= */
+const ICONS = {
+  combat: '<path d="M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 17.5 21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4M5 21l-2-2"/>',
+  npc: '<circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/>',
+  log: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
+  tables: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>',
+  dice: '<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/>',
+  note: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  pin: '<path d="M12 17v5M9 10.8V4h6v6.8l3 3.2H6z"/>',
+  reroll: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/>',
+  theme: '<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/>',
+  book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>'
+};
+const icon = n => `<svg class="i" viewBox="0 0 24 24">${ICONS[n]}</svg>`;
+const VIEWS = [['combat','Kampf','1'],['npc','NSC-Generator','2'],['log','Sitzungs-Log','3'],['tables','Tabellen','4']];
+
+function toast(msg, type) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (type ? ' ' + type : '');
+  el.textContent = msg;
+  const box = $('#toasts'); box.appendChild(el);
+  while (box.children.length > 3) box.firstChild.remove();
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; }, 2600);
+  setTimeout(() => el.remove(), 3000);
+}
+function openModal(title, body, foot = '', wide) {
+  closeModal();
+  const o = document.createElement('div');
+  o.className = 'overlay'; o.id = 'overlay';
+  o.innerHTML = `<div class="modal${wide ? ' wide' : ''}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="mh"><h2>${esc(title)}</h2><button class="icon-btn" data-act="closeModal" aria-label="Schließen">✕</button></div><div class="mb">${body}</div>${foot ? `<div class="mf">${foot}</div>` : ''}</div>`;
+  o.addEventListener('mousedown', e => { if (e.target === o) closeModal(); });
+  document.body.appendChild(o);
+  const f = o.querySelector('input,button.primary');
+  if (f) f.focus();
+}
+function closeModal() { const o = $('#overlay'); if (o) o.remove(); confirmCb = null; }
+let confirmCb = null;
+function confirmBox(text, okLabel, cb) {
+  openModal('Bist du sicher?', `<p>${esc(text)}</p>`, `<button class="btn ghost" data-act="closeModal">Abbrechen</button><button class="btn primary" data-act="confirmOk">${esc(okLabel)}</button>`);
+  confirmCb = cb;
+}
+
+/* ================= Würfel ================= */
+function rollExpr(raw) {
+  const s = String(raw).toLowerCase().replace(/\s+/g, '').replace(/w/g, 'd');
+  if (!s || !/^[+-]?(\d*d\d+|\d+)([+-](\d*d\d+|\d+))*$/.test(s)) return null;
+  const tokens = s.match(/[+-]?(\d*d\d+|\d+)/g);
+  let total = 0; const parts = [], groups = [];
+  for (const t of tokens) {
+    const sign = t[0] === '-' ? -1 : 1;
+    const body = t.replace(/^[+-]/, '');
+    if (body.includes('d')) {
+      let [n, f] = body.split('d');
+      n = n === '' ? 1 : +n; f = +f;
+      if (n < 1 || n > 100 || f < 2 || f > 1000) return null;
+      const rolls = Array.from({length: n}, () => rnd(f) + 1);
+      total += sign * rolls.reduce((a, b) => a + b, 0);
+      groups.push({n, f, rolls});
+      parts.push(`${sign < 0 ? '− ' : parts.length ? '+ ' : ''}${n}W${f} [${rolls.join(', ')}]`);
+    } else {
+      total += sign * +body;
+      parts.push(`${sign < 0 ? '− ' : '+ '}${body}`);
+    }
+  }
+  const r = {expr: s.replace(/d/g, 'W').replace(/^\+/, ''), total, detail: parts.join(' '), crit: null, msg: ''};
+  evalCrit(r, groups);
+  return r;
+}
+function evalCrit(r, groups) {
+  if (groups.length !== 1) return;
+  const g = groups[0], mode = P().crit;
+  const count = v => g.rolls.filter(x => x === v).length;
+  if (mode === 'd20' && g.n === 1 && g.f === 20) {
+    if (g.rolls[0] === 20) { r.crit = 'crit'; r.msg = 'Natürliche 20!'; }
+    else if (g.rolls[0] === 1) { r.crit = 'fumble'; r.msg = 'Natürliche 1!'; }
+  }
+  if (mode === 'dsa' && g.f === 20) {
+    if (g.n === 1 && g.rolls[0] === 1) { r.crit = 'crit'; r.msg = 'Eine 1: möglicher kritischer Erfolg, Bestätigungswurf!'; }
+    if (g.n === 1 && g.rolls[0] === 20) { r.crit = 'fumble'; r.msg = 'Eine 20: möglicher Patzer, Bestätigungswurf!'; }
+    if (g.n === 3 && count(1) >= 2) { r.crit = 'crit'; r.msg = count(1) === 3 ? 'Dreifach-1: kritischer Erfolg!' : 'Doppel-1: kritischer Erfolg!'; }
+    if (g.n === 3 && count(20) >= 2) { r.crit = 'fumble'; r.msg = count(20) === 3 ? 'Dreifach-20: Patzer!' : 'Doppel-20: Patzer!'; }
+  }
+  if (mode === 'coc' && g.n === 1 && g.f === 100) cocMsg(r, g.rolls[0]);
+}
+function cocMsg(r, v) {
+  if (v === 1) { r.crit = 'crit'; r.msg = '01: kritischer Erfolg!'; }
+  else if (v === 100) { r.crit = 'fumble'; r.msg = '100: Patzer!'; }
+  else if (v >= 96) { r.crit = 'fumble'; r.msg = 'Patzer, falls der Fertigkeitswert unter 50 liegt.'; }
+}
+function rollAdv(mode) {
+  const a = rnd(20) + 1, b = rnd(20) + 1;
+  const v = mode === 'adv' ? Math.max(a, b) : Math.min(a, b);
+  const r = {expr: mode === 'adv' ? '2W20, höherer' : '2W20, niedrigerer', total: v, detail: `[${a}, ${b}]`, crit: null, msg: ''};
+  evalCrit(r, [{n: 1, f: 20, rolls: [v]}]);
+  return r;
+}
+function rollCoc(mode) {
+  const units = rnd(10), t1 = rnd(10), t2 = rnd(10);
+  const val = t => (t * 10 + units) || 100;
+  const v1 = val(t1), v2 = val(t2);
+  const v = mode === 'bonus' ? Math.min(v1, v2) : Math.max(v1, v2);
+  const r = {expr: mode === 'bonus' ? 'W100 mit Bonuswürfel' : 'W100 mit Strafwürfel', total: v, detail: `Zehner [${t1}0, ${t2}0] · Einer ${units}`, crit: null, msg: ''};
+  cocMsg(r, v);
+  return r;
+}
+function rollPool(n) {
+  n = Math.max(1, Math.min(60, n || 1));
+  const rolls = Array.from({length: n}, () => rnd(6) + 1).sort((a, b) => b - a);
+  const hits = rolls.filter(x => x >= 5).length, ones = rolls.filter(x => x === 1).length;
+  const r = {expr: `${n}W6-Pool`, total: hits, detail: `[${rolls.join(', ')}] · ${hits} ${hits === 1 ? 'Erfolg' : 'Erfolge'}, ${ones}× 1`, crit: null, msg: ''};
+  if (ones > n / 2) { r.crit = 'fumble'; r.msg = hits === 0 ? 'Kritischer Patzer!' : 'Patzer!'; }
+  return r;
+}
+function rollSm(mode) {
+  if (mode === 'safe') { const a = rnd(10) + 1, b = rnd(10) + 1; return {expr: 'Sicherheitswurf (2W10, höherer)', total: Math.max(a, b), detail: `[${a}, ${b}]`, crit: null, msg: ''}; }
+  const rolls = Array.from({length: 4}, () => rnd(10) + 1);
+  const top = [...rolls].sort((a, b) => b - a).slice(0, 2);
+  return {expr: 'Risikowurf (4W10, zwei höchste)', total: top[0] + top[1], detail: `[${rolls.join(', ')}] → ${top.join(' + ')}`, crit: null, msg: ''};
+}
+function doRoll(r) {
+  if (!r) { toast('Ungültiger Wurf. Beispiele: 1W20, 3W6+2, 2W10-1', 'warn'); return; }
+  r.t = nowTime();
+  S.dice.unshift(r); S.dice = S.dice.slice(0, 30);
+  ui.lastRoll = r;
+  save(); renderAside(true);
+}
+
+/* ================= Rendering ================= */
+function render() {
+  const p = P();
+  document.documentElement.dataset.theme = S.theme;
+  $('#campaign').value = S.campaign;
+  $('#sessNum').textContent = S.session;
+  $('#systemSel').innerHTML = Object.entries(SYSTEMS).map(([k, s]) => `<option value="${k}" ${S.system === k ? 'selected' : ''}>${esc(s.label)}</option>`).join('');
+  $('#condList').innerHTML = p.conds.map(c => `<option value="${esc(c)}">`).join('');
+  $('#themeBtn').innerHTML = icon('theme') + (S.theme === 'dark' ? '<span class="lbl">Clean-Modus</span>' : '<span class="lbl">Rot-Schwarz</span>');
+  $('#themeBtn').title = S.theme === 'dark' ? 'Zum klassischen Schwarz-Weiß-Design wechseln' : 'Zum Rot-Schwarz-Design wechseln';
+  $('#nav').innerHTML = VIEWS.map(([k, l, n]) => `<button class="${S.view === k ? 'active' : ''}" data-act="view" data-v="${k}">${icon(k)}<span>${l}</span>${DEMO && k !== 'combat' ? '<small class="navlock">Voll</small>' : `<kbd>${n}</kbd>`}</button>`).join('') +
+    `<div class="navnote">Tipp: Drücke <kbd>?</kbd> für alle Tastenkürzel.</div>`;
+  renderMain();
+  renderAside();
+}
+const LOCKED = {
+  npc: {title: 'NSC-Generator', lead: 'Spieler fragen nach dem Namen? Ein Klick liefert eine komplette Figur zum Improvisieren.',
+    items: ['Name, Beruf, Alter, Aussehen, Persönlichkeit, Eigenart, Motiv und Geheimnis','Gesinnung zur Gruppe wählbar: positiv, neutral oder negativ – mit konkretem Verhalten','12 Herkünfte mit über 700 Namen: Fantasy, 1920er und Cyberpunk','Jedes Feld einzeln neu würfeln, Figuren speichern, filtern und in den Kampf schicken']},
+  log: {title: 'Sitzungs-Log', lead: 'Notiere in Sekunden, was passiert – und finde es später sofort wieder.',
+    items: ['Einträge mit Uhrzeit, automatisch nach Sitzung sortiert','@Personen, #Orte und !offene Fäden markieren und mit einem Klick filtern','Beendete Kämpfe und neue NSCs werden automatisch eingetragen','Offene Handlungsfäden abhaken, Schnellnotiz neben jedem Kampf']},
+  tables: {title: 'Tabellen', lead: 'Zufallstabellen und Spickzettel für jede Situation.',
+    items: ['Startpakete: Wetter, Tavernennamen, Gerüchte, Taschendiebesbeute, Straßenbegegnungen','Zustände-Spickzettel passend zu deinem Regelsystem','Eigene Tabellen per Einfügen anlegen, mit Gewichtung','Tabellen als Spickzettel neben dem Kampf anheften']}
+};
+function buyButtons() {
+  return `${BUY_URL ? `<a class="btn primary big" href="${BUY_URL}" target="_blank" rel="noopener">Vollversion holen</a>` : ''}
+    <a class="btn ${BUY_URL ? '' : 'primary big'}" href="mailto:${CONTACT}?subject=Spielleiter-Toolkit">${BUY_URL ? 'Frage stellen' : 'Vollversion anfragen'}</a>`;
+}
+function viewLocked(v) {
+  const L = LOCKED[v];
+  return `<div class="view-head"><div><h1>${L.title} <span class="lockb">Vollversion</span></h1><p class="muted">${L.lead}</p></div></div>
+  <div class="card locked">
+    <div class="lockicon">${icon('pin')}</div>
+    <h2>In der Vollversion enthalten</h2>
+    <ul class="tips">${L.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+    <div class="row gap wrap mt">${buyButtons()}</div>
+    <p class="hint">Fragen, Ideen oder Wünsche? Schreib uns an <a href="mailto:${CONTACT}">${CONTACT}</a>.</p>
+  </div>`;
+}
+function renderMain() {
+  const m = $('#main');
+  if (DEMO && S.view !== 'combat') { m.innerHTML = viewLocked(S.view); return; }
+  if (S.view === 'combat') m.innerHTML = viewCombat();
+  else if (S.view === 'npc') { m.innerHTML = viewNpc(); renderNpcList(); }
+  else if (S.view === 'log') { m.innerHTML = viewLog(); renderLogList(); }
+  else m.innerHTML = viewTables();
+}
+
+/* ---------- Kampf ---------- */
+const alive = x => x.hp == null || x.hp > 0;
+const isTick = () => !!P().tick;
+function sortedCombat() {
+  const tick = isTick();
+  return [...S.combat.list].sort((a, b) => {
+    if (tick) {
+      const at = a.init == null ? Infinity : a.init, bt = b.init == null ? Infinity : b.init;
+      if (at !== bt) return at - bt;
+      return (a.seq || 0) - (b.seq || 0);
+    }
+    const ai = a.init == null ? -Infinity : a.init, bi = b.init == null ? -Infinity : b.init;
+    if (bi !== ai) return bi - ai;
+    if (!!b.pc !== !!a.pc) return b.pc ? 1 : -1;
+    return a.order - b.order;
+  });
+}
+function rollInit(bonus, diceN) {
+  const p = P();
+  if (!p.ini.expr) return bonus;
+  const expr = p.ini.dice && diceN ? `${diceN}W6` : p.ini.expr;
+  const r = rollExpr(expr).total;
+  let v = p.ini.op === '-' ? (bonus || 0) - r : (bonus || 0) + r;
+  if (p.tick) v = Math.max(1, v);
+  return v;
+}
+function viewCombat() {
+  const c = S.combat, L = sortedCombat(), p = P(), tick = isTick();
+  const rows = L.length ? L.map(x => combatRow(x)).join('') :
+    `<div class="empty"><b>Noch niemand im Kampf</b>Füge oben Gegner hinzu oder lade deine Gruppe. „3“ bei Anzahl legt drei gleiche Gegner auf einmal an.</div>`;
+  const missing = L.filter(x => x.init == null);
+  const curTick = tick && L.length ? (L.find(alive) || L[0]).init : null;
+  return `
+  <div class="view-head"><div><h1>Kampf</h1><p class="muted">Initiative, ${esc(p.hp)} und Zustände auf einen Blick.</p></div>
+    <button class="sysline" data-act="pickSystemModal" title="Regelsystem wechseln">${icon('book')}<span>${esc(p.label)}</span></button></div>
+  <div class="card">
+    <form id="addForm" class="addrow" autocomplete="off">
+      <label class="f grow">Name<input name="name" placeholder="z. B. Goblin" required maxlength="40"></label>
+      <label class="f w70">Anzahl<input name="count" type="number" min="1" max="20" value="1"></label>
+      <label class="f w100">${esc(p.ini.label)}<input name="ini" type="number" placeholder="${p.ini.expr ? '0' : 'Pflicht'}"></label>
+      ${p.ini.dice ? '<label class="f w70">Ini-W6<input name="inidice" type="number" min="1" max="5" value="1"></label>' : ''}
+      <label class="f w80">${esc(p.hp)}<input name="hp" type="number" min="0" placeholder="–"></label>
+      ${p.r2 ? `<label class="f w80">${esc(p.r2)}<input name="r2" type="number" min="0" placeholder="–"></label>` : ''}
+      <label class="f w80">${esc(p.def)}<input name="def" type="number" placeholder="–"></label>
+      <label class="f wsel">Waffe<select name="weapon">${weaponOptions('')}</select></label>
+      <button class="btn primary" type="submit">Hinzufügen</button>
+    </form>
+    <p class="combat-hint">${esc(p.ini.hint)}${/[.!]$/.test(p.ini.hint) ? '' : '.'}${p.ini.expr ? ' Wird beim Hinzufügen automatisch gewürfelt.' : ''} Alle Werte außer Name sind optional.</p>
+    <div class="row gap mt wrap">
+      <button class="btn sm" data-act="addParty" ${S.party.length ? '' : 'disabled'}>${icon('npc')} Gruppe hinzufügen (${S.party.length})</button>
+      <button class="btn sm ghost" data-act="manageParty">Gruppe verwalten</button>
+      <button class="btn sm ghost" data-act="manageWeapons">${icon('combat')} Waffen</button>
+      ${missing.length && p.ini.expr ? `<button class="btn sm" data-act="rollMissing">${icon('dice')} Fehlende ${tick ? 'Startticks' : 'Initiative'} würfeln (${missing.length})</button>` : ''}
+    </div>
+  </div>
+  <div class="card cbar">
+    ${tick ? `<div class="round">Tick<b>${c.active && curTick != null ? curTick : '–'}</b></div>` : `<div class="round">Runde<b>${c.active ? c.round : '–'}</b></div>`}
+    <div class="spacer"></div>
+    ${c.active
+      ? (tick
+        ? `<button class="btn" data-act="prevTurn" ${c.hist.length ? '' : 'disabled'} title="Letzte Aktion zurücknehmen">↶ Rückgängig</button>
+           <label class="f w70 costf">Ticks<input id="tickCost" type="number" min="1" max="30" value="${c.lastCost || 5}" aria-label="Kosten der Aktion in Ticks"></label>
+           <button class="btn primary big" data-act="nextTurn">Aktion ausführen ▶ <kbd>N</kbd></button>
+           <button class="btn ghost danger" data-act="endCombat">Kampf beenden</button>`
+        : `<button class="btn" data-act="prevTurn" title="Einen Zug zurück">◀ Zurück</button>
+           <button class="btn primary big" data-act="nextTurn">Nächster Zug ▶ <kbd>N</kbd></button>
+           <button class="btn ghost danger" data-act="endCombat">Kampf beenden</button>`)
+      : `${L.length ? '<button class="btn ghost" data-act="clearCombat">Liste leeren</button>' : ''}
+         <button class="btn primary big" data-act="startCombat" ${L.length ? '' : 'disabled'}>Kampf starten ▶</button>`}
+  </div>
+  <div class="clist">${rows}</div>`;
+}
+function bar(val, max, label, cls) {
+  const m = max || val || 1;
+  const pct = Math.max(0, Math.min(100, val / m * 100));
+  const lvl = cls ? '' : pct <= 25 ? 'low' : pct <= 50 ? 'mid' : '';
+  return `<div class="hp"><div class="hpbar ${cls || ''}"><i class="${lvl}" style="width:${pct}%"></i></div><span class="hpnum"><b>${val}</b> / ${m} ${esc(label)}</span></div>`;
+}
+function combatRow(x) {
+  const p = P(), tick = isTick();
+  const cur = S.combat.active && S.combat.currentId === x.id;
+  const chips = x.conds.map((cd, i) => `<span class="chip">${esc(cd.name)}${cd.rounds != null ? `<b title="verbleibende Runden">${cd.rounds}</b>` : ''}<button data-act="rmCond" data-id="${x.id}" data-i="${i}" title="Zustand entfernen" aria-label="Zustand entfernen">✕</button></span>`).join('');
+  const condForm = ui.condFor === x.id ? `<form class="condform" data-id="${x.id}" autocomplete="off"><input name="cname" list="condList" placeholder="Zustand, z. B. ${esc(p.conds[0])}" required maxlength="30">${tick ? '' : '<input name="crounds" type="number" min="1" max="99" placeholder="Runden (leer = dauerhaft)">'}<button class="btn sm primary">Hinzufügen</button><button type="button" class="btn sm ghost" data-act="condCancel">Abbrechen</button></form>` : '';
+  const hasHp = x.hp != null, hasR2 = p.r2 && x.r2 != null;
+  return `<div class="crow ${cur ? 'current' : ''} ${alive(x) ? '' : 'down'}" data-id="${x.id}">
+    <div class="ini"><input type="number" class="${x.init == null ? 'need' : ''}" value="${x.init ?? ''}" data-change="setInit" data-id="${x.id}" placeholder="?" aria-label="${tick ? 'Tick' : 'Initiative'} von ${esc(x.name)}" title="${tick ? 'Tick-Position ändern' : 'Initiative ändern'}"><small>${tick ? 'Tick' : 'Ini'}</small></div>
+    <div>
+      <div class="cname">${cur ? '<span class="turnmark">am Zug</span>' : ''}<span class="nm">${esc(x.name)}</span>${x.pc ? '<span class="tag-sc">SC</span>' : ''}${x.def != null ? `<span class="def">${esc(p.def)} ${x.def}</span>` : ''}${alive(x) ? '' : '<span class="def">kampfunfähig</span>'}</div>
+      ${hasHp ? bar(x.hp, x.maxHp, p.hp) : ''}
+      ${hasR2 ? bar(x.r2, x.r2Max, p.r2, 'r2') : ''}
+      <div class="conds">${chips}${ui.condFor === x.id ? '' : `<button class="chip add" data-act="condForm" data-id="${x.id}">+ Zustand</button>`}</div>
+      ${condForm}
+      ${weaponRow(x)}
+    </div>
+    <div class="cact">
+      ${hasHp || hasR2 ? `<input type="number" min="0" class="amt" data-id="${x.id}" placeholder="0" aria-label="Wert" title="Enter = Schaden, Umschalt+Enter = Heilung">` : ''}
+      <span class="cbtns">
+      ${hasHp ? `<button class="btn sm dmg" data-act="dmg" data-id="${x.id}">− Schaden</button><button class="btn sm heal" data-act="heal" data-id="${x.id}">+ Heilung</button>` : ''}
+      ${hasR2 ? `<button class="btn sm r2b" data-act="r2down" data-id="${x.id}">− ${esc(p.r2)}</button><button class="btn sm r2b" data-act="r2up" data-id="${x.id}">+ ${esc(p.r2)}</button>` : ''}
+      </span>
+      <button class="icon-btn danger" data-act="removeC" data-id="${x.id}" title="Aus dem Kampf entfernen" aria-label="Entfernen">✕</button>
+    </div>
+  </div>`;
+}
+function findC(id) { return S.combat.list.find(x => x.id === id); }
+function nextOrder() { return Math.max(0, ...S.combat.list.map(x => Math.max(x.order || 0, x.seq || 0))) + 1; }
+function addCombatant(f) {
+  const fd = new FormData(f), p = P();
+  const name = String(fd.get('name') || '').trim();
+  if (!name) return;
+  const count = Math.max(1, Math.min(20, num(fd.get('count')) || 1));
+  const bonus = num(fd.get('ini')), diceN = num(fd.get('inidice')), hp = num(fd.get('hp')), r2 = num(fd.get('r2')), def = num(fd.get('def'));
+  const weapon = String(fd.get('weapon') || '') || null;
+  for (let i = 1; i <= count; i++) {
+    const o = nextOrder();
+    S.combat.list.push({id: uid(), name: count > 1 ? `${name} ${i}` : name, init: p.ini.expr || bonus != null ? rollInit(bonus, diceN) : null,
+      iniBonus: bonus, iniDice: diceN, hp, maxHp: hp, r2: p.r2 ? r2 : null, r2Max: p.r2 ? r2 : null, def, pc: false, conds: [], order: o, seq: o, weapon, dmgBonus: ''});
+  }
+  if (S.combat.active && isTick()) pickLowest();
+  save(); renderMain();
+  toast(`${count > 1 ? count + '× ' : ''}${name} hinzugefügt${p.ini.expr ? (isTick() ? ', Starttick gewürfelt' : ', Initiative gewürfelt') : ''}`);
+  const n = $('#addForm input[name=name]'); if (n) n.focus();
+}
+function tickConditions(x) {
+  if (!x || !x.conds.length || isTick()) return;
+  const ended = [];
+  x.conds.forEach(cd => { if (cd.rounds != null) cd.rounds -= 1; });
+  x.conds = x.conds.filter(cd => { if (cd.rounds != null && cd.rounds <= 0) { ended.push(cd.name); return false; } return true; });
+  if (ended.length) toast(`${x.name}: ${ended.join(', ')} endet`);
+}
+function pickLowest() { const f = sortedCombat().find(alive); S.combat.currentId = f ? f.id : null; }
+function startCombat() {
+  const L = sortedCombat();
+  const missing = L.filter(x => x.init == null);
+  if (missing.length) { toast(`${isTick() ? 'Starttick' : 'Initiative'} fehlt bei: ${missing.map(x => x.name).join(', ')}`, 'warn'); return; }
+  const first = L.find(alive);
+  if (!first) { toast('Niemand ist kampffähig.', 'warn'); return; }
+  Object.assign(S.combat, {active: true, round: 1, currentId: first.id, hist: []});
+  tickConditions(first);
+  save(); renderMain();
+}
+function nextTurn() {
+  const c = S.combat; if (!c.active) return startCombat();
+  const L = sortedCombat();
+  if (!L.some(alive)) { toast('Niemand ist mehr kampffähig.', 'warn'); return; }
+  if (isTick()) {
+    const x = findC(c.currentId);
+    const cost = num($('#tickCost') && $('#tickCost').value) || c.lastCost || 5;
+    c.lastCost = cost;
+    if (x) { c.hist.push({id: x.id, cost, seq: x.seq}); x.init += cost; x.seq = nextOrder(); }
+    c.hist = c.hist.slice(-50);
+    pickLowest();
+    save(); renderMain();
+    return;
+  }
+  const i = L.findIndex(x => x.id === c.currentId);
+  let idx = i, wrapped = false;
+  do { idx++; if (idx >= L.length) { idx = 0; wrapped = true; } } while (!alive(L[idx]));
+  if (wrapped && i !== -1) { c.round++; toast(`Runde ${c.round}`); }
+  c.currentId = L[idx].id;
+  tickConditions(L[idx]);
+  save(); renderMain();
+}
+function prevTurn() {
+  const c = S.combat;
+  if (!c.active) return;
+  if (isTick()) {
+    const h = c.hist.pop(); if (!h) return;
+    const x = findC(h.id); if (x) { x.init -= h.cost; x.seq = h.seq; }
+    pickLowest(); save(); renderMain(); return;
+  }
+  const L = sortedCombat();
+  if (!L.some(alive)) return;
+  const i = L.findIndex(x => x.id === c.currentId);
+  if (i === -1) return;
+  let idx = i, wrapped = false;
+  do { idx--; if (idx < 0) { idx = L.length - 1; wrapped = true; } } while (!alive(L[idx]));
+  if (wrapped) c.round = Math.max(1, c.round - 1);
+  c.currentId = L[idx].id;
+  save(); renderMain();
+}
+function endCombat() {
+  confirmBox('Der Kampf wird beendet und im Sitzungs-Log vermerkt. Die Kampfliste wird geleert.', 'Kampf beenden', () => {
+    const c = S.combat, L = c.list;
+    const down = L.filter(x => !alive(x)).map(x => x.name);
+    const foes = [...new Set(L.filter(x => !x.pc).map(x => x.name.replace(/ \d+$/, '')))];
+    let text;
+    if (isTick()) { const t = (sortedCombat().find(alive) || {}).init; text = `Kampf beendet${t != null ? ` bei Tick ${t}` : ''}`; }
+    else text = `Kampf beendet nach ${c.round} ${c.round === 1 ? 'Runde' : 'Runden'}`;
+    if (foes.length) text += ` gegen ${foes.join(', ')}`;
+    text += '.';
+    if (down.length) text += ` Kampfunfähig: ${down.join(', ')}.`;
+    addLog(text);
+    S.combat = Object.assign(emptyCombat(), {lastCost: c.lastCost}); ui.attack = null;
+    save(); renderMain(); renderAside();
+    toast('Kampf im Log vermerkt');
+  });
+}
+function changeVal(id, field, sign) {
+  const x = findC(id); if (!x) return;
+  const inp = document.querySelector(`.amt[data-id="${id}"]`);
+  const v = num(inp && inp.value);
+  if (!v || v < 0) { toast('Erst einen Wert eintragen', 'warn'); if (inp) inp.focus(); return; }
+  if (field === 'hp') {
+    if (x.hp == null) return;
+    const wasAlive = alive(x);
+    x.hp = Math.max(0, Math.min(x.maxHp ?? Infinity, x.hp + sign * v));
+    if (wasAlive && !alive(x)) toast(`${x.name} ist kampfunfähig`);
+    if (!wasAlive && alive(x)) toast(`${x.name} ist wieder auf den Beinen`);
+    if (S.combat.active && isTick() && !alive(x) && S.combat.currentId === x.id) pickLowest();
+  } else {
+    if (x.r2 == null) return;
+    x.r2 = Math.max(0, Math.min(x.r2Max ?? Infinity, x.r2 + sign * v));
+    if (P().short === 'SR6' && x.r2 === 0) toast(`${x.name}: geistiger Monitor voll – bewusstlos`);
+  }
+  save(); renderMain();
+}
+function addParty() {
+  if (!S.party.length) return;
+  const p = P(); let added = 0;
+  S.party.forEach(pc => {
+    if (S.combat.list.some(x => x.pc && x.partyId === pc.id)) return;
+    const o = nextOrder();
+    S.combat.list.push({id: uid(), partyId: pc.id, name: pc.name, init: p.ini.expr ? null : (pc.ini ?? null), iniBonus: pc.ini ?? null, iniDice: pc.iniDice ?? null,
+      hp: pc.hp, maxHp: pc.hp, r2: p.r2 ? (pc.r2 ?? null) : null, r2Max: p.r2 ? (pc.r2 ?? null) : null, def: pc.def, pc: true, conds: [], order: o, seq: o,
+      weapon: getWeapon(pc.weapon) ? pc.weapon : null, dmgBonus: pc.dmgBonus || ''});
+    added++;
+  });
+  save(); renderMain();
+  if (!added) toast('Die Gruppe ist schon im Kampf.');
+  else toast(p.ini.expr ? `${added} SC hinzugefügt. Würfel lassen oder „Fehlende würfeln“ nutzen.` : `${added} SC hinzugefügt.`);
+}
+function rollMissing() {
+  let n = 0;
+  S.combat.list.forEach(x => { if (x.init == null) { x.init = rollInit(x.iniBonus, x.iniDice); n++; } });
+  if (S.combat.active && isTick()) pickLowest();
+  save(); renderMain(); toast(`${n}× gewürfelt`);
+}
+function manageParty() {
+  const p = P();
+  const rows = S.party.length ? S.party.map(pc => `<div class="party-row"><b>${esc(pc.name)}</b><span class="muted small">${[pc.ini != null ? `${p.ini.label} ${pc.ini}` : '', pc.hp != null ? `${pc.hp} ${p.hp}` : '', p.r2 && pc.r2 != null ? `${pc.r2} ${p.r2}` : '', pc.def != null ? `${p.def} ${pc.def}` : '', getWeapon(pc.weapon) ? getWeapon(pc.weapon).name + (pc.dmgBonus ? ' +' + pc.dmgBonus : '') : ''].filter(Boolean).join(' · ') || '–'}</span><button class="icon-btn danger" data-act="rmParty" data-id="${pc.id}" aria-label="Entfernen">✕</button></div>`).join('') :
+    '<p class="muted small">Noch keine Spielercharaktere gespeichert.</p>';
+  openModal('Gruppe verwalten', `<p class="muted small">Gespeicherte Spielercharaktere lädst du mit einem Klick in jeden Kampf. Felder richten sich nach dem Regelsystem (${esc(p.short)}).</p>
+    <div class="mt">${rows}</div>
+    <form id="partyForm" class="addrow mt" autocomplete="off">
+      <label class="f grow">Name<input name="name" required maxlength="40" placeholder="z. B. Rhonda"></label>
+      <label class="f w100">${esc(p.ini.label)}<input name="ini" type="number"></label>
+      ${p.ini.dice ? '<label class="f w70">Ini-W6<input name="inidice" type="number" min="1" max="5" value="1"></label>' : ''}
+      <label class="f w80">${esc(p.hp)}<input name="hp" type="number" min="0"></label>
+      ${p.r2 ? `<label class="f w80">${esc(p.r2)}<input name="r2" type="number" min="0"></label>` : ''}
+      <label class="f w80">${esc(p.def)}<input name="def" type="number"></label>
+      <label class="f wsel">Waffe<select name="weapon">${weaponOptions('')}</select></label>
+      <label class="f w80">${esc(W().bonus)}<input name="dmgBonus" maxlength="12" placeholder="z. B. 3"></label>
+      <button class="btn primary">Speichern</button>
+    </form>`, '<button class="btn" data-act="closeModal">Fertig</button>', true);
+}
+
+/* ---------- Waffen ---------- */
+const CRIT = {
+  x2: {short: '×2', long: 'Schaden ×2'}, x3: {short: '×3', long: 'Schaden ×3'}, x4: {short: '×4', long: 'Schaden ×4'},
+  dice2: {short: 'Würfel ×2', long: 'Schadenswürfel verdoppelt'}, max: {short: 'Maximum', long: 'Maximalschaden'},
+  maxroll: {short: 'Max + Wurf', long: 'Maximalschaden plus normaler Wurf'}, none: {short: '–', long: 'kein kritischer Schaden'}
+};
+// [Name, Schaden, Kritisch, ab (Bedrohungsbereich), Schadensart]
+const WPN = {
+  generic: {bonus: 'Bonus', critBtn: 'Kritisch', def: 'x2', list: [
+    ['Faust','1W3','x2'],['Dolch','1W4','x2',19],['Kurzschwert','1W6','x2',19],['Langschwert','1W8','x2',19],['Zweihänder','2W6','x2',19],
+    ['Rapier','1W6','x2',18],['Krummsäbel','1W6','x2',18],['Streitaxt','1W8','x3'],['Großaxt','1W12','x3'],['Kriegshammer','1W8','x3'],
+    ['Streitkolben','1W8','x2'],['Morgenstern','1W8','x2'],['Speer','1W8','x3'],['Hellebarde','1W10','x3'],['Sense','2W4','x4'],
+    ['Kampfstab','1W6','x2'],['Kurzbogen','1W6','x3'],['Langbogen','1W8','x3'],['Leichte Armbrust','1W8','x2',19],['Schwere Armbrust','1W10','x2',19]]},
+  dnd5e: {bonus: 'Bonus', critBtn: 'Kritisch', def: 'dice2', list: [
+    ['Waffenlos','1','dice2'],['Dolch','1W4','dice2'],['Kurzschwert','1W6','dice2'],['Langschwert','1W8','dice2'],['Langschwert (zweihändig)','1W10','dice2'],
+    ['Zweihandschwert','2W6','dice2'],['Rapier','1W8','dice2'],['Krummsäbel','1W6','dice2'],['Streitaxt','1W8','dice2'],['Zweihandaxt','1W12','dice2'],
+    ['Kriegshammer','1W8','dice2'],['Streitkolben','1W6','dice2'],['Morgenstern','1W8','dice2'],['Speer','1W6','dice2'],['Hellebarde','1W10','dice2'],
+    ['Kampfstab','1W6','dice2'],['Kurzbogen','1W6','dice2'],['Langbogen','1W8','dice2'],['Leichte Armbrust','1W8','dice2'],['Schwere Armbrust','1W10','dice2']]},
+  pf2: {bonus: 'Bonus', critBtn: 'Kritisch', def: 'x2', list: [
+    ['Faust','1W4','x2'],['Dolch','1W4','x2'],['Kurzschwert','1W6','x2'],['Langschwert','1W8','x2'],['Zweihandschwert','1W12','x2'],
+    ['Rapier','1W6','x2'],['Krummsäbel','1W6','x2'],['Streitaxt','1W8','x2'],['Zweihandaxt','1W12','x2'],['Kriegshammer','1W8','x2'],
+    ['Streitkolben','1W6','x2'],['Morgenstern','1W6','x2'],['Speer','1W6','x2'],['Hellebarde','1W10','x2'],['Kampfstab','1W4','x2'],
+    ['Kurzbogen','1W6','x2'],['Langbogen','1W8','x2'],['Armbrust','1W8','x2']]},
+  dsa5: {bonus: 'Bonus', critBtn: 'Kritisch', def: 'x2', list: [
+    ['Waffenlos','1W6','x2'],['Dolch','1W6+1','x2'],['Kurzschwert','1W6+2','x2'],['Säbel','1W6+3','x2'],['Rapier','1W6+3','x2'],
+    ['Langschwert','1W6+4','x2'],['Zweihänder','2W6+4','x2'],['Streitaxt','1W6+4','x2'],['Kampfstab','1W6+2','x2'],
+    ['Wurfmesser','1W6','x2'],['Kurzbogen','1W6+4','x2'],['Langbogen','1W6+8','x2'],['Leichte Armbrust','1W6+6','x2']]},
+  coc7: {bonus: 'Schadensbonus', critBtn: 'Extremer Erfolg', def: 'maxroll', list: [
+    ['Faust','1W3','max'],['Messer','1W4','maxroll'],['Knüppel','1W6','max'],['Axt','1W8+2','maxroll'],['Säbel','1W8','maxroll'],
+    ['Bogen','1W6','maxroll'],['Derringer .41','1W8','maxroll'],['Revolver .38','1W10','maxroll'],['Pistole .45','1W10+2','maxroll'],
+    ['Thompson-MP','1W10+2','maxroll'],['Gewehr .30-06','2W6+4','maxroll'],['Schrotflinte 12er (nah)','4W6','max']]},
+  sr6: {bonus: 'Netto-Erfolge', critBtn: '', def: 'none', list: [
+    ['Kampfmesser','3','none',null,'K'],['Schwert','3','none',null,'K'],['Katana','4','none',null,'K'],['Betäubungsschlagstock','5','none',null,'G'],
+    ['Leichte Pistole','2','none',null,'K'],['Schwere Pistole','3','none',null,'K'],['Maschinenpistole','3','none',null,'K'],
+    ['Schrotflinte','4','none',null,'K'],['Sturmgewehr','5','none',null,'K'],['Scharfschützengewehr','5','none',null,'K']]},
+  splitter: {bonus: 'Bonus', critBtn: 'Kritisch', def: 'none', list: []}
+};
+const W = () => WPN[S.system] || WPN.generic;
+function weaponList() {
+  const p = W();
+  const pre = p.list.map((w, i) => ({key: `p:${S.system}:${i}`, name: w[0], dmg: w[1], crit: w[2], threat: w[3] || null, type: w[4] || null, own: false}));
+  const own = S.weapons.filter(w => w.sys === S.system).map(w => ({...w, key: `o:${w.id}`, own: true}));
+  return pre.concat(own);
+}
+const getWeapon = key => key ? weaponList().find(w => w.key === key) || null : null;
+function weaponLabel(w) {
+  const bits = [w.dmg + (w.type ? ' ' + w.type : '')];
+  if (w.crit && w.crit !== 'none') bits.push((w.threat ? `${w.threat}–20/` : '') + CRIT[w.crit].short);
+  return `${w.name} (${bits.join(', ')})`;
+}
+function weaponOptions(cur) {
+  const L = weaponList(), pre = L.filter(w => !w.own), own = L.filter(w => w.own);
+  const o = w => `<option value="${w.key}" ${cur === w.key ? 'selected' : ''}>${esc(weaponLabel(w))}</option>`;
+  return `<option value="">– keine Waffe –</option>${pre.length ? `<optgroup label="Vorgaben (${esc(P().short)})">${pre.map(o).join('')}</optgroup>` : ''}${own.length ? `<optgroup label="Eigene Waffen">${own.map(o).join('')}</optgroup>` : ''}`;
+}
+function maxOf(expr) {
+  const t = String(expr).toLowerCase().replace(/\s+/g, '').replace(/w/g, 'd').match(/[+-]?(\d*d\d+|\d+)/g) || [];
+  return t.reduce((m, x) => {
+    const sg = x[0] === '-' ? -1 : 1, b = x.replace(/^[+-]/, '');
+    if (b.includes('d')) { let [n, f] = b.split('d'); n = n === '' ? 1 : +n; return m + sg * n * (+f); }
+    return m + sg * +b;
+  }, 0);
+}
+const doubleDice = expr => String(expr).replace(/(\d*)\s*[wWdD]\s*(\d+)/g, (m, n, f) => `${(n === '' ? 1 : +n) * 2}W${f}`);
+function rollWeapon(w, bonus, crit) {
+  const bs = String(bonus || '').trim();
+  const b = bs ? rollExpr(bs) : null;
+  if (bs && !b) return null;
+  const bt = b ? b.total : 0, bd = b ? ` + Bonus ${b.detail.replace(/^\+\s*/, '')}` : '';
+  const base = rollExpr(w.dmg); if (!base) return null;
+  if (!crit || w.crit === 'none') return {total: base.total + bt, detail: base.detail + bd};
+  if (w.crit === 'dice2') { const r = rollExpr(doubleDice(w.dmg)); return {total: r.total + bt, detail: `Würfel verdoppelt: ${r.detail}${bd}`}; }
+  if (w.crit === 'max') { const m = maxOf(w.dmg); return {total: m + bt, detail: `Maximalschaden ${m}${bd}`}; }
+  if (w.crit === 'maxroll') { const m = maxOf(w.dmg); return {total: m + base.total + bt, detail: `Maximum ${m} + Wurf ${base.detail}${bd}`}; }
+  const n = +String(w.crit).replace('x', '') || 2;
+  return {total: (base.total + bt) * n, detail: `(${base.detail}${bd}) × ${n}`};
+}
+function attack(id, crit) {
+  const x = findC(id); if (!x) return;
+  const w = getWeapon(x.weapon); if (!w) { toast('Erst eine Waffe wählen', 'warn'); return; }
+  const r = rollWeapon(w, x.dmgBonus, crit);
+  if (!r) { toast(`Ungültiger ${W().bonus}. Beispiele: 2, 1W4`, 'warn'); return; }
+  const label = `${w.name}${crit ? ` – ${W().critBtn || 'Kritisch'} (${CRIT[w.crit].short})` : ''}`;
+  ui.attack = {by: id, total: Math.max(0, r.total), detail: r.detail, label, type: w.type};
+  S.dice.unshift({expr: `${x.name}: ${label}`, total: ui.attack.total, detail: r.detail, crit: crit ? 'crit' : null, msg: '', t: nowTime()});
+  S.dice = S.dice.slice(0, 30); ui.lastRoll = S.dice[0];
+  save(); renderMain(); renderAside();
+}
+function attackBox(x) {
+  const a = ui.attack, p = P();
+  const field = a.type === 'G' && p.r2 ? 'r2' : 'hp';
+  const targets = sortedCombat().filter(t => t.id !== x.id && t[field] != null);
+  const pref = targets.filter(alive).find(t => !!t.pc !== !!x.pc) || targets.find(alive) || targets[0];
+  const unit = field === 'r2' ? p.r2 : p.hp;
+  return `<div class="atkres pop">
+    <span class="big">${a.total}</span>
+    <span class="det"><b>${esc(a.label)}</b><br>${esc(a.detail)}${a.type ? ` · Schadensart ${a.type}` : ''}</span>
+    ${targets.length ? `<label class="tgt">auf <select id="atkTarget" aria-label="Ziel">${targets.map(t => `<option value="${t.id}" ${pref && pref.id === t.id ? 'selected' : ''}>${esc(t.name)} (${t[field]} ${esc(unit)})</option>`).join('')}</select></label>
+      <button class="btn sm primary" data-act="applyAtk">Abziehen</button>` : `<span class="muted small">Kein Ziel mit ${esc(unit)} im Kampf</span>`}
+    <button class="icon-btn" data-act="dismissAtk" title="Schließen" aria-label="Schließen">✕</button>
+  </div>`;
+}
+function applyAttack() {
+  const a = ui.attack; if (!a) return;
+  const sel = $('#atkTarget'); const t = sel && findC(sel.value); if (!t) return;
+  const field = a.type === 'G' && P().r2 ? 'r2' : 'hp';
+  const wasAlive = alive(t);
+  if (field === 'hp') t.hp = Math.max(0, t.hp - a.total); else t.r2 = Math.max(0, t.r2 - a.total);
+  toast(`${t.name}: −${a.total} ${field === 'hp' ? P().hp : P().r2}`);
+  if (wasAlive && !alive(t)) toast(`${t.name} ist kampfunfähig`);
+  if (S.combat.active && isTick() && !alive(t) && S.combat.currentId === t.id) pickLowest();
+  ui.attack = null; save(); renderMain();
+}
+function weaponRow(x) {
+  const w = getWeapon(x.weapon), p = W();
+  return `<div class="wpn">
+    <select data-change="setWeapon" data-id="${x.id}" aria-label="Waffe von ${esc(x.name)}">${weaponOptions(x.weapon)}</select>
+    ${w ? `<input class="wbonus" data-change="setDmgBonus" data-id="${x.id}" value="${esc(x.dmgBonus || '')}" placeholder="${esc(p.bonus)}" title="${esc(p.bonus)}: Zahl oder Würfel, z. B. 3 oder 1W4" aria-label="${esc(p.bonus)}">
+      <button class="btn sm" data-act="atkDmg" data-id="${x.id}">${icon('dice')} Schaden</button>
+      ${w.crit !== 'none' ? `<button class="btn sm crit" data-act="atkCrit" data-id="${x.id}" title="${esc(CRIT[w.crit].long)}">${esc(p.critBtn || 'Kritisch')} ${esc(CRIT[w.crit].short)}</button>` : ''}` : ''}
+  </div>
+  ${ui.attack && ui.attack.by === x.id ? attackBox(x) : ''}`;
+}
+function manageWeapons() {
+  const p = P(), wp = W(), L = weaponList();
+  const pre = L.filter(w => !w.own), own = L.filter(w => w.own);
+  const row = w => `<tr><td>${esc(w.name)}</td><td>${esc(w.dmg)}${w.type ? ' ' + w.type : ''}</td><td>${w.crit === 'none' ? '–' : (w.threat ? `${w.threat}–20 / ` : '') + esc(CRIT[w.crit].short)}</td><td>${w.own ? `<button class="icon-btn danger" data-act="rmWeapon" data-id="${w.id}" aria-label="Löschen">✕</button>` : ''}</td></tr>`;
+  const critOpts = Object.entries(CRIT).map(([k, c]) => `<option value="${k}" ${wp.def === k ? 'selected' : ''}>${esc(c.short === '–' ? 'kein Krit' : c.short)} – ${esc(c.long)}</option>`).join('');
+  const isSr = S.system === 'sr6';
+  openModal(`Waffen · ${p.short}`, `
+    <p class="muted small">Waffe im Kampf pro Teilnehmer wählen, dann „Schaden“ oder „${esc(wp.critBtn || 'Kritisch')}“ klicken. Eigene Waffen gelten für das aktuelle Regelsystem.</p>
+    ${pre.length ? `<p class="hint">Die Vorgaben sind gängige Standardwerte. Gleiche sie mit deinem Regelwerk ab und lege bei Abweichungen eigene Waffen an.</p>` : `<p class="hint">Für ${esc(p.label)} sind keine Vorgaben hinterlegt. Lege deine Waffen unten an.</p>`}
+    <form id="weaponForm" class="addrow mt" autocomplete="off">
+      <label class="f grow">Name<input name="name" required maxlength="40" placeholder="z. B. Runenklinge"></label>
+      <label class="f w100">Schaden<input name="dmg" required maxlength="20" placeholder="${isSr ? '3' : '1W8+2'}"></label>
+      ${isSr ? '<label class="f w80">Art<select name="type"><option value="K">K</option><option value="G">G</option></select></label>' :
+        `<label class="f">Kritisch<select name="crit">${critOpts}</select></label>
+         <label class="f w80">Krit ab<input name="threat" type="number" min="2" max="20" placeholder="20"></label>`}
+      <button class="btn primary">Hinzufügen</button>
+    </form>
+    <h2 class="mt" style="margin:16px 0 6px">Eigene Waffen</h2>
+    ${own.length ? `<table class="wtable"><tr><th>Waffe</th><th>Schaden</th><th>Kritisch</th><th></th></tr>${own.map(row).join('')}</table>` : '<p class="muted small">Noch keine eigenen Waffen.</p>'}
+    ${pre.length ? `<h2 style="margin:16px 0 6px">Vorgaben</h2><table class="wtable"><tr><th>Waffe</th><th>Schaden</th><th>Kritisch</th><th></th></tr>${pre.map(row).join('')}</table>` : ''}`,
+    '<button class="btn" data-act="closeModal">Fertig</button>', true);
+}
+
+/* ---------- NSC ---------- */
+const NPC_FIELDS = [['job','Beruf'],['ageText','Alter'],['look','Aussehen'],['trait','Persönlichkeit'],['quirk','Eigenart'],['motive','Motiv'],['behavior','Haltung zur Gruppe'],['secret','Geheimnis']];
+function validCulture() {
+  const set = P().npcSet;
+  if (!CULTURES[S.npcPrefs.culture] || CULTURES[S.npcPrefs.culture].set !== set) S.npcPrefs.culture = culturesFor(set)[0][0];
+  return S.npcPrefs.culture;
+}
+function jobFor(K, role, g) { return pick(K.jobs[role])[g === 'm' ? 0 : 1]; }
+function genNpc() {
+  const cult = validCulture(), C = CULTURES[cult], K = CONTENT[C.set], pr = S.npcPrefs;
+  const g = pr.gender === 'x' ? (rnd(2) ? 'm' : 'f') : pr.gender;
+  const age = AGES[pr.age] ? pr.age : pick(['jung','erwachsen','erwachsen','alt']);
+  const role = K.jobs[pr.role] ? pr.role : pick(Object.keys(K.jobs));
+  const att = ATT[pr.att] ? pr.att : pick(['pos','neu','neu','neg']);
+  ui.draft = {culture: cult, g, age, role, att, name: makeName(cult, g), job: jobFor(K, role, g), ageText: pick(AGES[age]),
+    look: pick(K.looks), trait: pick(TRAITS), quirk: pick(QUIRKS), motive: pick(K.motives), behavior: pick(ATT[att].lines), secret: pick(K.secrets)};
+}
+function makeName(cult, g) {
+  const C = CULTURES[cult];
+  const used = new Set(S.npcs.map(n => n.name.split(' ')[0]));
+  let first, tries = 0;
+  do { first = pick(C[g]); tries++; } while (used.has(first) && tries < 60);
+  return `${first} ${C.last(g)}`;
+}
+function rerollField(f) {
+  const d = ui.draft; if (!d) return;
+  const K = CONTENT[CULTURES[d.culture].set];
+  const fn = {
+    name: () => makeName(d.culture, d.g), job: () => jobFor(K, d.role, d.g), ageText: () => pick(AGES[d.age]),
+    look: () => pick(K.looks), trait: () => pick(TRAITS), quirk: () => pick(QUIRKS), motive: () => pick(K.motives),
+    behavior: () => pick(ATT[d.att].lines), secret: () => pick(K.secrets)
+  }[f];
+  if (!fn) return;
+  const old = d[f]; let v, tries = 0;
+  do { v = fn(); tries++; } while (v === old && tries < 10);
+  d[f] = v;
+}
+const attBadge = a => ATT[a] ? `<span class="attb ${a}">${ATT[a].label}</span>` : '';
+function npcSelect(chg, cur, opts, label) {
+  return `<label class="f">${label}<select data-change="${chg}">${opts.map(([v, l]) => `<option value="${v}" ${cur === v ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></label>`;
+}
+function viewNpc() {
+  const d = ui.draft, set = P().npcSet, cult = validCulture(), K = CONTENT[set], pr = S.npcPrefs;
+  const seg = ['x','pos','neu','neg'].map(v => `<button class="${(pr.att || 'x') === v ? 'on' : ''} ${v}" data-act="prefAtt" data-v="${v}">${v === 'x' ? 'Zufällig' : ATT[v].label}</button>`).join('');
+  const card = d ? `<div class="npc-card att-${d.att}">
+      <div class="npc-head">
+        <div class="grow"><div class="nname">${esc(d.name)}</div><div class="muted small">${esc(CULTURES[d.culture].label)} · ${d.g === 'm' ? 'männlich' : 'weiblich'} · ${esc(K.roles[d.role])}</div></div>
+        <div class="seg sm" title="Gesinnung ändern">${['pos','neu','neg'].map(v => `<button class="${d.att === v ? 'on' : ''} ${v}" data-act="draftAtt" data-v="${v}">${ATT[v].label}</button>`).join('')}</div>
+      </div>
+      ${NPC_FIELDS.map(([k, l]) => `<div class="npc-field ${k === 'behavior' ? 'hl' : ''}"><span class="lbl">${l}</span><span>${esc(d[k])}</span><button class="icon-btn" data-act="reroll" data-f="${k}" title="${l} neu würfeln" aria-label="${l} neu würfeln">${icon('reroll')}</button></div>`).join('')}
+      <div class="npc-foot">
+        <button class="btn primary" data-act="saveNpc">Übernehmen</button>
+        <button class="btn" data-act="reroll" data-f="name">${icon('reroll')} Anderer Name</button>
+        <button class="btn ghost" data-act="genNpc">Ganz neu</button>
+        <button class="btn ghost" data-act="discardNpc">Verwerfen</button>
+      </div></div>` :
+    `<div class="empty mt"><b>Spieler fragen nach dem Namen?</b>Wähle oben, was feststehen soll, und klicke auf „Neuer NSC“. Alles auf „Zufällig“ liefert eine komplett überraschende Figur.</div>`;
+  const setName = {fantasy: 'Fantasy', twenties: '1920er-Jahre', cyber: 'Cyberpunk'}[set];
+  return `
+  <div class="view-head"><div><h1>NSC-Generator</h1><p class="muted">Eine fertige Figur zum Improvisieren, mit einem Klick. Setting: ${setName} (${esc(P().short)}).</p></div></div>
+  <div class="card">
+    <div class="npcopts">
+      ${npcSelect('npcCulture', cult, culturesFor(set).map(([k, c]) => [k, c.label]), 'Herkunft')}
+      ${npcSelect('npcGender', pr.gender, [['x','Zufällig'],['m','männlich'],['f','weiblich']], 'Geschlecht')}
+      ${npcSelect('npcAge', pr.age || 'x', [['x','Zufällig'],['jung','Jung'],['erwachsen','Erwachsen'],['alt','Alt']], 'Alter')}
+      ${npcSelect('npcRole', pr.role || 'x', [['x','Zufällig'], ...Object.entries(K.roles)], 'Stand')}
+    </div>
+    <div class="row wrap gap mt" style="align-items:flex-end">
+      <div class="f">Gesinnung zur Gruppe<div class="seg">${seg}</div></div>
+      <div class="spacer"></div>
+      <button class="btn primary big" data-act="genNpc">Neuer NSC <kbd>G</kbd></button>
+    </div>
+    ${card}
+  </div>
+  <div class="card">
+    <div class="card-title wrap"><h2>Gespeicherte NSCs <span class="muted">(${S.npcs.length})</span></h2>
+      <select data-change="npcFilterAtt" aria-label="Nach Gesinnung filtern"><option value="all">Alle Gesinnungen</option>${['pos','neu','neg'].map(v => `<option value="${v}" ${ui.npcAtt === v ? 'selected' : ''}>${ATT[v].label}</option>`).join('')}</select>
+      <input type="search" id="npcSearch" placeholder="Suchen…" value="${esc(ui.npcSearch)}" style="width:180px"></div>
+    <div id="npcList"></div>
+  </div>`;
+}
+function renderNpcList() {
+  const box = $('#npcList'); if (!box) return;
+  const q = ui.npcSearch.trim().toLowerCase();
+  const list = S.npcs.filter(n => (!ui.npcAtt || ui.npcAtt === 'all' || n.att === ui.npcAtt)
+    && (!q || [n.name, n.job, n.look, n.trait, n.quirk, n.motive, n.behavior, n.secret, n.notes].join(' ').toLowerCase().includes(q)));
+  if (!S.npcs.length) { box.innerHTML = '<div class="empty"><b>Noch keine NSCs gespeichert</b>Mit „Übernehmen“ landet eine Figur hier und im Sitzungs-Log.</div>'; return; }
+  if (!list.length) { box.innerHTML = '<p class="muted">Keine Treffer.</p>'; return; }
+  box.innerHTML = `<div class="npc-list">${list.map(n => `<div class="npc-item att-${n.att || 'none'}">
+    <div class="top"><div><div class="nm">${esc(n.name)} ${attBadge(n.att)}</div><div class="meta">${esc(n.job)} · ${esc(CULTURES[n.culture]?.label || '')}${n.ageText ? ' · ' + esc(n.ageText) : ''} · Sitzung ${n.session}</div></div>
+      <button class="icon-btn" data-act="npcToCombat" data-id="${n.id}" title="In den Kampf schicken" aria-label="In den Kampf">${icon('combat')}</button>
+      <button class="icon-btn danger" data-act="rmNpc" data-id="${n.id}" title="Löschen" aria-label="Löschen">✕</button></div>
+    <ul><li>${esc(n.look)}</li>${n.trait ? `<li>${esc(n.trait)}</li>` : ''}<li>${esc(n.quirk)}</li><li>${esc(n.motive)}</li>${n.behavior ? `<li><b>Zur Gruppe:</b> ${esc(n.behavior)}</li>` : ''}</ul>
+    ${n.secret ? `<details><summary>Geheimnis anzeigen</summary><p class="small">${esc(n.secret)}</p></details>` : ''}
+    <div class="row gap small"><span class="muted">Gesinnung</span><select data-change="npcAtt" data-id="${n.id}" aria-label="Gesinnung von ${esc(n.name)}">${['pos','neu','neg'].map(v => `<option value="${v}" ${n.att === v ? 'selected' : ''}>${ATT[v].label}</option>`).join('')}${n.att ? '' : '<option value="" selected>–</option>'}</select></div>
+    <textarea data-change="npcNote" data-id="${n.id}" placeholder="Notizen…" aria-label="Notizen zu ${esc(n.name)}">${esc(n.notes || '')}</textarea>
+  </div>`).join('')}</div>`;
+}
+
+/* ---------- Log ---------- */
+const TAG_RE = /(^|\s)([@#!])([0-9A-Za-zÄÖÜäöüßÀ-ÿ_\-]+)/g;
+const isOpenThread = t => /(^|\s)![0-9A-Za-zÄÖÜäöüßÀ-ÿ_\-]+/.test(t);
+function addLog(text) {
+  S.log.push({id: uid(), session: S.session, time: nowTime(), ts: Date.now(), text, done: false});
+  save();
+}
+function fmtLog(t) {
+  return esc(t).replace(TAG_RE, (m, pre, sym, w) => `${pre}<button class="tag ${sym === '@' ? 'tp' : sym === '#' ? 'to' : 'tf'}" data-act="filterTag" data-tag="${esc(sym + w)}" title="Nach ${esc(sym + w)} filtern">${sym}${esc(w.replace(/_/g, ' '))}</button>`);
+}
+function viewLog() {
+  const sessions = [...new Set([S.session, ...S.log.map(e => e.session)])].sort((a, b) => b - a);
+  return `
+  <div class="view-head"><div><h1>Sitzungs-Log</h1><p class="muted">Kurz notieren, was passiert. Enter speichert mit Uhrzeit.</p></div></div>
+  <div class="card">
+    <form id="logForm" class="row gap" autocomplete="off"><input name="text" class="grow" id="logInput" placeholder="Was ist passiert? z. B. @Alrik verrät #Burg_Falkenstein !Schatzkarte" maxlength="500"><button class="btn primary">Speichern</button></form>
+    <div class="hint"><code>@Name</code> markiert eine Person · <code>#Ort</code> einen Ort · <code>!Stichwort</code> einen offenen Handlungsfaden. Leerzeichen im Namen als Unterstrich: <code>@Alrik_Eichhorn</code>. Ein Klick auf eine Markierung filtert danach.</div>
+  </div>
+  <div class="card">
+    <div class="row wrap gap filters">
+      <select data-change="logSession" aria-label="Sitzung"><option value="all">Alle Sitzungen</option>${sessions.map(s => `<option value="${s}" ${String(ui.logSession) === String(s) ? 'selected' : ''}>Sitzung ${s}</option>`).join('')}</select>
+      <input type="search" id="logSearch" placeholder="Im Log suchen…" value="${esc(ui.logSearch)}">
+      <label class="chk"><input type="checkbox" data-change="logOpen" ${ui.logOpen ? 'checked' : ''}> Nur offene Fäden</label>
+      ${ui.logTag ? `<span class="activefilter">Filter: <b>${esc(ui.logTag.replace(/_/g, ' '))}</b><button class="icon-btn" style="width:24px;height:24px" data-act="clearTag" aria-label="Filter entfernen">✕</button></span>` : ''}
+    </div>
+    <div id="logList" class="mt"></div>
+  </div>`;
+}
+function renderLogList() {
+  const box = $('#logList'); if (!box) return;
+  const q = ui.logSearch.trim().toLowerCase();
+  const tagRe = ui.logTag ? new RegExp('(^|\\s)' + ui.logTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![0-9A-Za-zÄÖÜäöüßÀ-ÿ_\\-])', 'i') : null;
+  const list = S.log.filter(e => (ui.logSession === 'all' || String(e.session) === String(ui.logSession))
+    && (!q || e.text.toLowerCase().includes(q))
+    && (!ui.logOpen || (isOpenThread(e.text) && !e.done))
+    && (!tagRe || tagRe.test(e.text)));
+  if (!S.log.length) { box.innerHTML = '<div class="empty"><b>Das Log ist noch leer</b>Notiere oben, was in der Sitzung passiert. Beendete Kämpfe und übernommene NSCs landen automatisch hier.</div>'; return; }
+  if (!list.length) { box.innerHTML = '<p class="muted">Keine Einträge für diesen Filter.</p>'; return; }
+  const groups = {};
+  list.forEach(e => (groups[e.session] = groups[e.session] || []).push(e));
+  box.innerHTML = Object.keys(groups).map(Number).sort((a, b) => b - a).map(s =>
+    `<div class="sess-h">Sitzung ${s}</div><div class="loglist">${groups[s].slice().reverse().map(logRow).join('')}</div>`).join('');
+}
+function logRow(e) {
+  const open = isOpenThread(e.text);
+  if (ui.editLog === e.id) return `<form class="logEdit row gap" data-id="${e.id}" style="padding:6px 0"><input name="text" class="grow" value="${esc(e.text)}" maxlength="500"><button class="btn sm primary">Speichern</button><button type="button" class="btn sm ghost" data-act="cancelEdit">Abbrechen</button></form>`;
+  return `<div class="lentry ${open && e.done ? 'done' : ''}">
+    <span class="time">${esc(e.time)}</span>
+    <span>${open ? `<input type="checkbox" data-change="logDone" data-id="${e.id}" ${e.done ? 'checked' : ''} title="Faden erledigt" aria-label="Faden erledigt">` : ''}</span>
+    <span class="txt">${fmtLog(e.text)}</span>
+    <span class="acts"><button class="icon-btn" data-act="editLog" data-id="${e.id}" title="Bearbeiten" aria-label="Bearbeiten">${icon('note')}</button><button class="icon-btn danger" data-act="rmLog" data-id="${e.id}" title="Löschen" aria-label="Löschen">✕</button></span>
+  </div>`;
+}
+
+/* ---------- Tabellen ---------- */
+const sysTable = () => ({id: 'sys', name: `Zustände (${P().short})`, entries: P().conds, readonly: true});
+const allTables = () => [sysTable(), ...S.tables];
+function parseEntries(t) {
+  return t.entries.map(line => { const m = String(line).match(/^(\d+)\s*[x×]\s+(.+)$/i); return m ? {w: Math.max(1, +m[1]), text: m[2]} : {w: 1, text: String(line)}; }).filter(e => e.text.trim());
+}
+function rollTable(t) {
+  const es = parseEntries(t); if (!es.length) return null;
+  const tot = es.reduce((a, e) => a + e.w, 0);
+  let r = rnd(tot);
+  for (const e of es) { if (r < e.w) return e.text; r -= e.w; }
+  return es[es.length - 1].text;
+}
+function currentTable() {
+  const all = allTables();
+  let t = all.find(x => x.id === ui.tableSel);
+  if (!t) { t = all[1] || all[0]; ui.tableSel = t.id; }
+  return t;
+}
+function viewTables() {
+  const t = currentTable();
+  const list = allTables().map(x => `<button class="t ${x.id === t.id ? 'active' : ''}" data-act="selTable" data-id="${x.id}"><span>${esc(x.name)}</span>${S.pinned === x.id ? icon('pin') : ''}<span class="cnt">${parseEntries(x).length}</span></button>`).join('');
+  let body;
+  if (ui.tableEdit && !t.readonly) body = `<form id="tableEdit" autocomplete="off">
+      <label class="f">Name der Tabelle<input name="name" value="${esc(t.name)}" required maxlength="50"></label>
+      <label class="f mt">Einträge, einer pro Zeile<textarea name="entries" rows="14">${esc(t.entries.join('\n'))}</textarea></label>
+      <p class="hint">Tipp: <code>3x Ein Eintrag</code> macht einen Eintrag dreimal so wahrscheinlich.</p>
+      <div class="row gap mt"><button class="btn primary">Speichern</button><button type="button" class="btn ghost" data-act="cancelTable">Abbrechen</button></div></form>`;
+  else {
+    const es = parseEntries(t);
+    body = `<div class="row wrap gap"><h2 class="grow" style="font-size:20px">${esc(t.name)}</h2>
+        <button class="btn sm ghost" data-act="pinTable" title="Als Spickzettel in der rechten Spalte anzeigen">${icon('pin')} ${S.pinned === t.id ? 'Lösen' : 'Anheften'}</button>
+        ${t.readonly ? '' : `<button class="btn sm ghost" data-act="editTable">${icon('note')} Bearbeiten</button><button class="btn sm ghost danger" data-act="rmTable">Löschen</button>`}</div>
+      ${t.readonly ? `<p class="hint">Passt sich automatisch an das gewählte Regelsystem an. Die Regeln zu den Zuständen stehen in deinem Regelwerk.</p>` : ''}
+      <div class="row gap mt"><button class="btn primary big" data-act="rollTable" ${es.length ? '' : 'disabled'}>${icon('dice')} Würfeln</button><span class="muted small">${es.length} Einträge</span></div>
+      ${ui.tableResult && ui.tableResult.id === t.id ? `<div class="result pop"><span>${esc(ui.tableResult.text)}</span><button class="btn sm" data-act="tableToLog" title="Ergebnis ins Sitzungs-Log schreiben">Ins Log</button></div>` : ''}
+      <ol class="entries mt">${es.map(e => `<li class="${ui.tableResult && ui.tableResult.id === t.id && ui.tableResult.text === e.text ? 'hit' : ''}"><span>${esc(e.text)}</span>${e.w > 1 ? ` <small>(×${e.w})</small>` : ''}</li>`).join('')}</ol>`;
+  }
+  return `
+  <div class="view-head"><div><h1>Tabellen</h1><p class="muted">Zufallstabellen und Spickzettel. Eigene Listen in Sekunden anlegen.</p></div></div>
+  <div class="tables">
+    <div class="card"><div class="tlist">${list}</div><button class="btn sm mt" style="width:100%" data-act="newTable">+ Neue Tabelle</button></div>
+    <div class="card">${body}</div>
+  </div>`;
+}
+
+/* ---------- Seitenleiste rechts ---------- */
+function renderAside(animate) {
+  const p = P();
+  const r = ui.lastRoll || S.dice[0];
+  const pinned = allTables().find(t => t.id === S.pinned);
+  const notes = S.log.filter(e => e.session === S.session).slice(-3).reverse();
+  const sp = {
+    adv: '<button class="btn sm" data-act="adv" title="Zwei W20, der höhere zählt">2W20 ↑</button>',
+    dis: '<button class="btn sm" data-act="dis" title="Zwei W20, der niedrigere zählt">2W20 ↓</button>',
+    cocBonus: '<button class="btn sm" data-act="cocBonus" title="Zwei Zehnerwürfel, der bessere (niedrigere) zählt">W100 + Bonuswürfel</button>',
+    cocMalus: '<button class="btn sm" data-act="cocMalus" title="Zwei Zehnerwürfel, der schlechtere (höhere) zählt">W100 + Strafwürfel</button>',
+    smSafe: '<button class="btn sm" data-act="smSafe" title="2W10, nur der höhere zählt">Sicherheitswurf</button>',
+    smRisk: '<button class="btn sm" data-act="smRisk" title="4W10, die zwei höchsten zählen">Risikowurf</button>'
+  };
+  const specials = p.specials.filter(k => sp[k]).map(k => sp[k]).join('');
+  $('#aside').innerHTML = `
+  <div class="card">
+    <div class="card-title">${icon('dice')}<h2>Würfel <span class="muted small">· ${esc(p.short)}</span></h2>${S.dice.length ? '<button class="btn sm ghost" data-act="clearDice">Leeren</button>' : ''}</div>
+    <div class="dgrid">${p.dice.map(e => `<button class="btn" data-act="quickDie" data-e="${e}">${e.replace(/^1W/, 'W')}</button>`).join('')}</div>
+    ${specials ? `<div class="spgrid mt">${specials}</div>` : ''}
+    ${p.specials.includes('pool') ? `<form id="poolForm" class="row gap mt" autocomplete="off"><label class="f w70">Pool<input name="n" type="number" min="1" max="60" value="${S.poolSize || 8}"></label><button class="btn primary grow" style="align-self:flex-end">W6-Pool würfeln</button></form>` : ''}
+    <form id="diceForm" class="row gap mt" autocomplete="off"><input name="expr" class="grow" placeholder="z. B. 2W6+3" aria-label="Würfelausdruck"><button class="btn primary">Würfeln</button></form>
+    ${r ? `<div class="dresult"><span class="num ${r.crit || ''} ${animate ? 'pop' : ''}">${r.total}</span><span class="det"><b>${esc(r.expr)}</b><br>${esc(r.detail)}${r.msg ? `<br><span class="dmsg ${r.crit || ''}">${esc(r.msg)}</span>` : ''}</span></div>` : '<p class="muted small mt">Klicke einen Würfel oder tippe einen Ausdruck. Taste <kbd>W</kbd> würfelt 1W20.</p>'}
+    ${S.dice.length > 1 ? `<ul class="dhist">${S.dice.slice(1, 12).map(d => `<li><span class="e">${esc(d.t)} · ${esc(d.expr)}</span><b>${d.total}</b></li>`).join('')}</ul>` : ''}
+  </div>
+  <div class="card promo">
+    <div class="card-title">${icon('book')}<h2>Gefällt dir die Demo?</h2></div>
+    <p class="small">Die Vollversion enthält zusätzlich den NSC-Generator, das Sitzungs-Log mit Schnellnotiz und Zufallstabellen.</p>
+    <div class="row gap wrap mt">${buyButtons()}</div>
+    <p class="hint">Feedback: <a href="mailto:${CONTACT}">${CONTACT}</a></p>
+  </div>
+  ${pinned ? `<div class="card pinned">
+    <div class="card-title">${icon('pin')}<h2>${esc(pinned.name)}</h2><button class="btn sm" data-act="rollPinned">Würfeln</button></div>
+    ${ui.tableResult && ui.tableResult.id === pinned.id ? `<div class="result pop" style="font-size:15px;padding:12px;margin:0 0 10px"><span>${esc(ui.tableResult.text)}</span></div>` : ''}
+    <ol>${parseEntries(pinned).map(e => `<li>${esc(e.text)}</li>`).join('')}</ol>
+  </div>` : ''}`;
+}
+
+/* ================= Regelsystem wählen ================= */
+const SYS_INFO = {
+  generic: 'TP, 1W20 + Bonus, freie Zustände',
+  dnd5e: 'TP, RK, Vorteil/Nachteil, natürliche 20',
+  pf2: 'TP, RK, Wahrnehmung, Zustände mit Wert',
+  dsa5: 'LeP, AsP/KaP, RS, INI + 1W6, 3W20-Proben',
+  coc7: 'TP, Stabilität, GE-Reihenfolge, Bonus-/Strafwürfel',
+  sr6: 'Zustandsmonitore, INI + W6, Würfelpools mit Erfolgen',
+  splitter: 'Tickleiste, LP, Fokus, Sicherheits- und Risikowurf'
+};
+function systemGrid() {
+  return `<div class="syspick">${Object.entries(SYSTEMS).map(([k, s]) => `<button class="${S.system === k ? 'on' : ''}" data-act="pickSystem" data-s="${k}"><b>${esc(s.label)}</b><span>${esc(SYS_INFO[k])}</span></button>`).join('')}</div>`;
+}
+function setSystem(k) {
+  if (!SYSTEMS[k]) return;
+  if (S.combat.active && k !== S.system) { toast('Beende zuerst den laufenden Kampf, dann kannst du das System wechseln.', 'warn'); render(); return; }
+  S.system = k; S.seenSystem = true;
+  ui.lastRoll = null; ui.draft = null; ui.attack = null;
+  if (ui.tableResult && ui.tableResult.id === 'sys') ui.tableResult = null;
+  validCulture();
+  save(); render();
+  toast(`Angepasst an ${SYSTEMS[k].label}`);
+}
+
+/* ================= Aktionen ================= */
+const actions = {
+  view: b => { S.view = b.dataset.v; save(); render(); window.scrollTo({top: 0}); },
+  theme: () => { S.theme = S.theme === 'dark' ? 'clean' : 'dark'; save(); render(); },
+  help: () => showHelp(),
+  closeModal: () => closeModal(),
+  confirmOk: () => { const cb = confirmCb; closeModal(); if (cb) cb(); },
+  pickSystem: b => { closeModal(); setSystem(b.dataset.s); },
+  pickSystemModal: () => openModal('Regelsystem wählen', `<p class="muted small">Begriffe, Initiative, Zustände, Würfel und NSC-Setting passen sich an. Deine Daten bleiben erhalten.</p>${systemGrid()}`, '', true),
+  sessUp: () => { S.session++; save(); render(); toast(`Sitzung ${S.session} gestartet. Tipp: Zwischendurch „Sichern“ nutzen.`); },
+  sessDown: () => { if (S.session > 1) { S.session--; save(); render(); } },
+  export: () => openModal('Daten sichern', `<p>Sichere deine Kampagne als Datei. So kannst du sie auf einem anderen Gerät laden oder nach dem Löschen des Browser-Speichers wiederherstellen.</p>
+      <div class="row gap mt wrap"><button class="btn primary" data-act="doDownload">Als Datei herunterladen</button><button class="btn" data-act="copyExport">In Zwischenablage kopieren</button></div>
+      <p class="hint">Falls der Download nicht startet: Daten kopieren und in eine Textdatei einfügen.</p>`, '<button class="btn ghost" data-act="closeModal">Schließen</button>'),
+  doDownload: () => { closeModal(); exportData(); },
+  copyExport: () => {
+    const txt = exportText();
+    const ok = () => { S.lastExport = Date.now(); save(); toast('Daten in die Zwischenablage kopiert'); };
+    try { navigator.clipboard.writeText(txt).then(ok, () => showCopyBox(txt)); } catch (e) { showCopyBox(txt); }
+  },
+  import: () => openModal('Daten laden', `<p>Wähle eine Sicherungsdatei oder füge gesicherte Daten ein. Die aktuellen Daten werden ersetzt.</p>
+      <div class="mt"><button class="btn primary" data-act="pickFile">Datei auswählen</button></div>
+      <label class="f mt">Oder Daten einfügen<textarea id="importText" rows="5" placeholder='{"app":"spielleiter-toolkit", …}'></textarea></label>`,
+      '<button class="btn ghost" data-act="closeModal">Abbrechen</button><button class="btn" data-act="importPasted">Eingefügte Daten laden</button>'),
+  pickFile: () => $('#importFile').click(),
+  importPasted: () => { const t = $('#importText'); if (!t || !t.value.trim()) { toast('Erst Daten einfügen', 'warn'); return; } importText(t.value); },
+  // Kampf
+  startCombat: () => startCombat(),
+  nextTurn: () => nextTurn(),
+  prevTurn: () => prevTurn(),
+  endCombat: () => endCombat(),
+  rollMissing: () => rollMissing(),
+  atkDmg: b => attack(b.dataset.id, false),
+  atkCrit: b => attack(b.dataset.id, true),
+  applyAtk: () => applyAttack(),
+  dismissAtk: () => { ui.attack = null; renderMain(); },
+  manageWeapons: () => manageWeapons(),
+  rmWeapon: b => { S.weapons = S.weapons.filter(w => w.id !== b.dataset.id); save(); manageWeapons(); renderMain(); },
+  clearCombat: () => confirmBox('Alle Teilnehmer aus der Liste entfernen?', 'Liste leeren', () => { S.combat = Object.assign(emptyCombat(), {lastCost: S.combat.lastCost}); save(); renderMain(); }),
+  dmg: b => changeVal(b.dataset.id, 'hp', -1),
+  heal: b => changeVal(b.dataset.id, 'hp', 1),
+  r2down: b => changeVal(b.dataset.id, 'r2', -1),
+  r2up: b => changeVal(b.dataset.id, 'r2', 1),
+  removeC: b => {
+    const c = S.combat, L = sortedCombat();
+    if (c.currentId === b.dataset.id) {
+      const i = L.findIndex(x => x.id === b.dataset.id);
+      const rest = L.slice(i + 1).concat(L.slice(0, i)).filter(alive);
+      c.currentId = rest[0] ? rest[0].id : null;
+    }
+    c.list = c.list.filter(x => x.id !== b.dataset.id);
+    if (ui.attack && ui.attack.by === b.dataset.id) ui.attack = null;
+    c.hist = c.hist.filter(h => h.id !== b.dataset.id);
+    if (!c.list.length) Object.assign(c, {active: false, round: 1, currentId: null, hist: []});
+    else if (c.active && isTick()) pickLowest();
+    save(); renderMain();
+  },
+  condForm: b => { ui.condFor = b.dataset.id; renderMain(); const i = document.querySelector('.condform input[name=cname]'); if (i) i.focus(); },
+  condCancel: () => { ui.condFor = null; renderMain(); },
+  rmCond: b => { const x = findC(b.dataset.id); if (x) { x.conds.splice(+b.dataset.i, 1); save(); renderMain(); } },
+  addParty: () => addParty(),
+  manageParty: () => manageParty(),
+  rmParty: b => { S.party = S.party.filter(p => p.id !== b.dataset.id); save(); manageParty(); renderMain(); },
+  // NSC
+  genNpc: () => { genNpc(); renderMain(); },
+  reroll: b => { rerollField(b.dataset.f); renderMain(); },
+  prefAtt: b => { S.npcPrefs.att = b.dataset.v; save(); renderMain(); },
+  draftAtt: b => { const d = ui.draft; if (!d || d.att === b.dataset.v) return; d.att = b.dataset.v; d.behavior = pick(ATT[d.att].lines); renderMain(); },
+  discardNpc: () => { ui.draft = null; renderMain(); },
+  saveNpc: () => {
+    const d = ui.draft; if (!d) return;
+    S.npcs.unshift({id: uid(), name: d.name, culture: d.culture, g: d.g, age: d.age, role: d.role, att: d.att, job: d.job, ageText: d.ageText, look: d.look, trait: d.trait, quirk: d.quirk, motive: d.motive, behavior: d.behavior, secret: d.secret, notes: '', session: S.session});
+    addLog(`Neuer NSC: @${d.name.replace(/[„“"]/g, '').trim().replace(/\s+/g, '_')} (${d.job}, ${ATT[d.att].log})`);
+    ui.draft = null; save(); renderMain(); renderAside();
+    toast(`${d.name} gespeichert und im Log vermerkt`);
+  },
+  rmNpc: b => { const n = S.npcs.find(x => x.id === b.dataset.id); confirmBox(`${n ? n.name : 'Diesen NSC'} löschen?`, 'Löschen', () => { S.npcs = S.npcs.filter(x => x.id !== b.dataset.id); save(); renderMain(); }); },
+  npcToCombat: b => { if (DEMO) return;
+    const n = S.npcs.find(x => x.id === b.dataset.id); if (!n) return;
+    const o = nextOrder(), p = P();
+    S.combat.list.push({id: uid(), name: n.name, init: p.ini.expr ? rollInit(0) : null, iniBonus: null, iniDice: null, hp: null, maxHp: null, r2: null, r2Max: null, def: null, pc: false, conds: [], order: o, seq: o});
+    if (S.combat.active && isTick()) pickLowest();
+    save(); toast(`${n.name} ist im Kampf${p.ini.expr ? ' (gewürfelt, Wert ohne Bonus)' : ''}`);
+  },
+  // Log
+  filterTag: b => { ui.logTag = b.dataset.tag; if (S.view !== 'log') { S.view = 'log'; save(); render(); } else renderMain(); },
+  clearTag: () => { ui.logTag = null; renderMain(); },
+  editLog: b => { ui.editLog = b.dataset.id; renderLogList(); const i = document.querySelector('.logEdit input'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } },
+  cancelEdit: () => { ui.editLog = null; renderLogList(); },
+  rmLog: b => { S.log = S.log.filter(e => e.id !== b.dataset.id); save(); renderLogList(); renderAside(); },
+  // Tabellen
+  selTable: b => { ui.tableSel = b.dataset.id; ui.tableEdit = false; renderMain(); },
+  rollTable: () => { const t = currentTable(); const r = rollTable(t); if (r != null) { ui.tableResult = {id: t.id, text: r}; renderMain(); renderAside(); } },
+  rollPinned: () => { const t = allTables().find(x => x.id === S.pinned); if (!t) return; const r = rollTable(t); if (r != null) { ui.tableResult = {id: t.id, text: r}; renderAside(); if (S.view === 'tables') renderMain(); } },
+  tableToLog: () => { const t = currentTable(); if (!ui.tableResult) return; addLog(`${t.name}: ${ui.tableResult.text}`); renderAside(); toast('Ins Log geschrieben'); },
+  pinTable: () => { const t = currentTable(); S.pinned = S.pinned === t.id ? null : t.id; save(); renderMain(); renderAside(); },
+  editTable: () => { ui.tableEdit = true; renderMain(); },
+  cancelTable: () => { ui.tableEdit = false; renderMain(); },
+  newTable: () => { const t = {id: uid(), name: 'Neue Tabelle', entries: []}; S.tables.push(t); ui.tableSel = t.id; ui.tableEdit = true; save(); renderMain(); const i = $('#tableEdit input[name=name]'); if (i) { i.focus(); i.select(); } },
+  rmTable: () => { const t = currentTable(); if (t.readonly) return; confirmBox(`Tabelle „${t.name}“ löschen?`, 'Löschen', () => { S.tables = S.tables.filter(x => x.id !== t.id); if (S.pinned === t.id) S.pinned = null; ui.tableSel = null; save(); renderMain(); renderAside(); }); },
+  // Würfel
+  quickDie: b => doRoll(rollExpr(b.dataset.e)),
+  adv: () => doRoll(rollAdv('adv')),
+  dis: () => doRoll(rollAdv('dis')),
+  cocBonus: () => doRoll(rollCoc('bonus')),
+  cocMalus: () => doRoll(rollCoc('malus')),
+  smSafe: () => doRoll(rollSm('safe')),
+  smRisk: () => doRoll(rollSm('risk')),
+  clearDice: () => { S.dice = []; ui.lastRoll = null; save(); renderAside(); },
+  resetAll: () => confirmBox('Wirklich ALLE Daten löschen? Das kann nicht rückgängig gemacht werden. Sichere vorher, wenn du unsicher bist.', 'Alles löschen', () => { S = defaultState(); S.seenWelcome = true; S.seenSystem = true; save(); Object.assign(ui, {draft: null, condFor: null, logTag: null, tableSel: null, tableResult: null, lastRoll: null}); render(); toast('Alle Daten gelöscht'); })
+};
+const changes = {
+  system: el => setSystem(el.value),
+  setWeapon: el => { const x = findC(el.dataset.id); if (x) { x.weapon = el.value || null; if (ui.attack && ui.attack.by === x.id) ui.attack = null; save(); renderMain(); } },
+  setDmgBonus: el => { const x = findC(el.dataset.id); if (x) { x.dmgBonus = el.value.trim(); save(); } },
+  setInit: el => { const x = findC(el.dataset.id); if (x) { x.init = num(el.value); if (S.combat.active && isTick()) pickLowest(); save(); renderMain(); } },
+  npcCulture: el => { S.npcPrefs.culture = el.value; save(); },
+  npcGender: el => { S.npcPrefs.gender = el.value; save(); },
+  npcAge: el => { S.npcPrefs.age = el.value; save(); },
+  npcRole: el => { S.npcPrefs.role = el.value; save(); },
+  npcFilterAtt: el => { ui.npcAtt = el.value; renderNpcList(); },
+  npcAtt: el => { const n = S.npcs.find(x => x.id === el.dataset.id); if (n && ATT[el.value]) { n.att = el.value; n.behavior = pick(ATT[el.value].lines); save(); renderNpcList(); toast(`${n.name} ist jetzt ${ATT[el.value].log}`); } },
+  npcNote: el => { const n = S.npcs.find(x => x.id === el.dataset.id); if (n) { n.notes = el.value; save(); } },
+  logSession: el => { ui.logSession = el.value; renderLogList(); },
+  logOpen: el => { ui.logOpen = el.checked; renderLogList(); },
+  logDone: el => { const e = S.log.find(x => x.id === el.dataset.id); if (e) { e.done = el.checked; save(); renderLogList(); } }
+};
+
+/* ================= Formulare ================= */
+document.addEventListener('submit', e => {
+  const f = e.target; e.preventDefault();
+  if (f.id === 'addForm') addCombatant(f);
+  else if (f.classList.contains('condform')) {
+    const x = findC(f.dataset.id); const fd = new FormData(f);
+    const name = String(fd.get('cname') || '').trim();
+    if (x && name) { x.conds.push({name, rounds: num(fd.get('crounds'))}); ui.condFor = null; save(); renderMain(); }
+  }
+  else if (f.id === 'partyForm') {
+    const fd = new FormData(f); const name = String(fd.get('name') || '').trim(); if (!name) return;
+    S.party.push({id: uid(), name, ini: num(fd.get('ini')), iniDice: num(fd.get('inidice')), hp: num(fd.get('hp')), r2: num(fd.get('r2')), def: num(fd.get('def')), weapon: String(fd.get('weapon') || '') || null, dmgBonus: String(fd.get('dmgBonus') || '').trim()});
+    save(); manageParty(); renderMain();
+    const i = $('#partyForm input[name=name]'); if (i) i.focus();
+  }
+  else if (f.id === 'logForm' || f.id === 'quickNote') {
+    const inp = f.querySelector('input[name=text]'); const t = inp.value.trim(); if (!t) return;
+    addLog(t); inp.value = '';
+    if (S.view === 'log') renderLogList();
+    renderAside();
+    if (f.id === 'quickNote') { toast('Notiz gespeichert'); const q = $('#quickNote input'); if (q) q.focus(); }
+  }
+  else if (f.classList.contains('logEdit')) {
+    const e2 = S.log.find(x => x.id === f.dataset.id); const t = f.querySelector('input').value.trim();
+    if (e2 && t) { e2.text = t; save(); }
+    ui.editLog = null; renderLogList(); renderAside();
+  }
+  else if (f.id === 'weaponForm') {
+    const fd = new FormData(f); const name = String(fd.get('name') || '').trim(); const dmg = String(fd.get('dmg') || '').trim();
+    if (!name || !dmg) return;
+    if (!rollExpr(dmg)) { toast('Ungültiger Schaden. Beispiele: 1W8, 2W6+3, 4', 'warn'); return; }
+    S.weapons.push({id: uid(), sys: S.system, name, dmg: dmg.replace(/d/gi, 'W'), crit: S.system === 'sr6' ? 'none' : (String(fd.get('crit') || W().def)), threat: num(fd.get('threat')), type: S.system === 'sr6' ? String(fd.get('type') || 'K') : null});
+    save(); manageWeapons(); renderMain(); toast(`${name} angelegt`);
+    const i = $('#weaponForm input[name=name]'); if (i) i.focus();
+  }
+  else if (f.id === 'diceForm') { const v = f.querySelector('input').value; doRoll(rollExpr(v)); const i = $('#diceForm input'); if (i) i.value = v; }
+  else if (f.id === 'poolForm') { const n = num(f.querySelector('input').value) || 1; S.poolSize = n; doRoll(rollPool(n)); }
+  else if (f.id === 'tableEdit') {
+    const t = currentTable(); if (t.readonly) return; const fd = new FormData(f);
+    t.name = String(fd.get('name') || '').trim() || 'Ohne Namen';
+    t.entries = String(fd.get('entries') || '').split('\n').map(s => s.trim()).filter(Boolean);
+    ui.tableEdit = false; ui.tableResult = null; save(); renderMain(); renderAside(); toast('Tabelle gespeichert');
+  }
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
+  const fn = actions[b.dataset.act]; if (fn) { e.preventDefault(); fn(b, e); }
+});
+document.addEventListener('change', e => {
+  const el = e.target.closest('[data-change]'); if (!el) return;
+  const fn = changes[el.dataset.change]; if (fn) fn(el);
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'npcSearch') { ui.npcSearch = e.target.value; renderNpcList(); }
+  if (e.target.id === 'logSearch') { ui.logSearch = e.target.value; renderLogList(); }
+  if (e.target.id === 'campaign') { S.campaign = e.target.value; save(); }
+  if (e.target.id === 'tickCost') { const v = num(e.target.value); if (v) { S.combat.lastCost = v; save(); } }
+});
+document.addEventListener('keydown', e => {
+  const t = e.target;
+  if (t.classList && t.classList.contains('amt') && e.key === 'Enter') { e.preventDefault(); changeVal(t.dataset.id, 'hp', e.shiftKey ? 1 : -1); return; }
+  if (t.id === 'tickCost' && e.key === 'Enter') { e.preventDefault(); nextTurn(); return; }
+  if (t.matches && t.matches('.ini input') && e.key === 'Enter') { t.blur(); return; }
+  if (e.key === 'Escape') { if ($('#overlay')) closeModal(); else if (ui.condFor) { ui.condFor = null; renderMain(); } return; }
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable;
+  if (typing || e.ctrlKey || e.metaKey || e.altKey || $('#overlay')) return;
+  const k = e.key.toLowerCase();
+  if (['1','2','3','4'].includes(k)) { S.view = VIEWS[+k - 1][0]; save(); render(); }
+  else if (k === 'n' && S.view === 'combat') { e.preventDefault(); S.combat.active ? nextTurn() : startCombat(); }
+  else if (k === 'g' && !DEMO) { if (S.view !== 'npc') { S.view = 'npc'; save(); } genNpc(); render(); }
+  else if (k === 'w') doRoll(rollExpr('1W20'));
+  else if (k === 'l' && !DEMO) { e.preventDefault(); const q = $('#quickNote input'); if (q) q.focus(); }
+  else if (e.key === '?') showHelp();
+});
+
+/* ================= Sichern / Laden ================= */
+function exportText() { return JSON.stringify({app: 'spielleiter-toolkit', version: 2, exported: new Date().toISOString(), state: S}, null, 2); }
+function showCopyBox(txt) {
+  openModal('Daten kopieren', `<p class="small muted">Markiere den Text (Strg+A) und kopiere ihn (Strg+C). Speichere ihn in einer Textdatei.</p><textarea id="copyBox" rows="10" readonly>${esc(txt)}</textarea>`, '<button class="btn" data-act="closeModal">Fertig</button>');
+  const b = $('#copyBox'); if (b) { b.focus(); b.select(); }
+}
+function exportData() {
+  S.lastExport = Date.now(); save();
+  const blob = new Blob([exportText()], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `spielleiter-toolkit_${slug(S.campaign)}_${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  toast('Sicherungsdatei wird heruntergeladen');
+}
+$('#importFile').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => importText(reader.result);
+  reader.readAsText(file);
+  e.target.value = '';
+});
+function importText(raw) {
+  let obj;
+  try { obj = JSON.parse(raw); } catch (err) { toast('Die Daten konnten nicht gelesen werden.', 'warn'); return; }
+  if (!obj || obj.app !== 'spielleiter-toolkit' || !obj.state) { toast('Das sind keine Daten des Spielleiter-Toolkits.', 'warn'); return; }
+  confirmBox(`Kampagne „${obj.state.campaign || 'ohne Namen'}“ laden? Die aktuellen Daten werden ersetzt.`, 'Laden', () => {
+    S = normalize(obj.state); S.seenWelcome = true; S.seenSystem = true; save();
+    Object.assign(ui, {draft: null, condFor: null, logTag: null, tableSel: null, tableResult: null, lastRoll: null, editLog: null});
+    render(); toast('Kampagne geladen');
+  });
+}
+
+/* ================= Hilfe & Willkommen ================= */
+function showWelcome() {
+  openModal('Willkommen, Spielleiter!', `<p>Welches Regelsystem spielt ihr? Das Tool passt Begriffe, Initiative, Zustände, Würfel und NSCs daran an. Du kannst es jederzeit oben ändern.</p>${systemGrid()}
+    <p class="hint">Das ist die kostenlose Demo mit Kampf-Tracker und Würfeln. Dein System fehlt? Nimm „Allgemein“. Das funktioniert mit allen Systemen mit Initiative und Lebenspunkten.</p>`, '', true);
+}
+function showHelp() {
+  const keys = [['1 – 4','Bereich wechseln'],['N','Nächster Zug bzw. Aktion ausführen'],['G','Neuer NSC'],['W','1W20 würfeln'],['L','Schnellnotiz schreiben'],['Enter','im Schadensfeld: Schaden abziehen'],['Umschalt + Enter','im Schadensfeld: heilen'],['Esc','Fenster schließen'],['?','Diese Hilfe']];
+  openModal('Hilfe', `
+    <ul class="tips">
+      <li><b>Regelsystem:</b> oben in der Leiste wählen. Begriffe, Initiative, Zustände, Würfel und NSCs passen sich an.</li>
+      <li><b>Kampf:</b> Gegner eintragen, „Kampf starten“, dann mit <kbd>N</kbd> weiter. Zustände mit Rundenzahl laufen automatisch ab.</li>
+      <li><b>NSC-Generator:</b> Ein Klick liefert Name, Beruf, Aussehen, Eigenart und Motiv.</li>
+      <li><b>Sitzungs-Log:</b> Notizen mit <code>@Person</code>, <code>#Ort</code> und <code>!Faden</code> markieren und später filtern.</li>
+      <li><b>Tabellen:</b> Zufallstabellen würfeln oder als Spickzettel anheften.</li>
+      <li><b>Speichern:</b> passiert automatisch in diesem Browser. Mit „Sichern“ erstellst du zusätzlich eine Datei.</li>
+    </ul>
+    <h2 class="mt" style="margin-bottom:6px">Tastenkürzel</h2>
+    <table>${keys.map(([k, d]) => `<tr><td><kbd>${k}</kbd></td><td>${d}</td></tr>`).join('')}</table>
+    <div class="mt" style="padding-top:12px;border-top:1px solid var(--border)"><button class="btn sm ghost danger" data-act="resetAll">Alle Daten löschen</button></div>`,
+    `<button class="btn primary" data-act="closeModal">Schließen</button>`);
+}
+
+/* ================= Start ================= */
+render();
+if (!S.seenSystem) { S.seenWelcome = true; S.seenSystem = true; save(); showWelcome(); }
+
+</script>
+</body>
+</html>
