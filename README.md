@@ -8,15 +8,18 @@ Das Spielleiter-Toolkit ist ein kleiner Helfer für alle, die hinter dem Schirm 
 
 ## In der Demo enthalten
 
-- **Kampf-Tracker** – Initiative, Lebenspunkte, Zustände mit Rundenzähler, Waffen mit kritischem Multiplikator
-- **Würfel** – inklusive 3W20-Proben, Vorteil/Nachteil, Bonus-/Strafwürfeln und Würfelpools
-- **Regelsystem-Auswahl** – D&D 5e, Pathfinder 2, DSA 5, Call of Cthulhu 7, Shadowrun 6, Splittermond oder systemneutral
+Alle Funktionen der aktuellen Version – jede kann in der Demo **3× genutzt** werden:
 
-## Zusätzlich in der Vollversion
+- **Kampf-Tracker** – Initiative, Lebenspunkte, Zustände, Boni & Mali, Rückgängig; ein eigener Kampf je Regelwerk
+- **Charaktereditor** – Spielercharaktere schnell oder Schritt für Schritt erstellen, mit Startprofilen je Regelwerk
+- **Bestiarium** – 200 Gegner in sieben Regelwerksfassungen, Filter nach Gegnerart und Schwierigkeit, direkt in den Kampf
+- **Würfelproben, Nebenquests und Zauber** – Katalog mit Proben und Wirkungswürfen
+- **NSC-Generator, Beute, Sitzungs-Log, Zufallstabellen und Würfel**
+- **Regelsysteme** – D&D 5e, Pathfinder 2, DSA 5, Call of Cthulhu 7, Shadowrun 6, Splittermond oder systemneutral
 
-- NSC-Generator mit Gesinnung zur Gruppe, Motiv und Geheimnis
-- Sitzungs-Log mit @Personen, #Orten und !offenen Fäden
-- Zufallstabellen und Spickzettel
+## Vollversion
+
+Die Vollversion enthält dieselben Funktionen ohne Nutzungsgrenze.
 
 ## Kontakt
 
